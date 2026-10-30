@@ -7,6 +7,9 @@ export default {
   darkMode: 'class',
   theme: {
     extend: {
+      screens: {
+        'xs': '380px',
+      },
       colors: {
         vardha: {
           bg: '#0C0D0C',

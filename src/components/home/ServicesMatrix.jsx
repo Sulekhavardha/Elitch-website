@@ -49,17 +49,6 @@ export default function ServicesMatrix() {
 
   return (
     <div className="w-full">
-      {/* Section Header with image accent */}
-      <ScrollReveal animation="fade-up" duration={600}>
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center mb-16">
-          <div className="lg:col-span-7">
-            <div className="max-w-2xl">
-              {null}
-            </div>
-          </div>
-        </div>
-      </ScrollReveal>
-
       {/* Filter Pills */}
       <ScrollReveal animation="fade-up" delay={150} duration={600}>
         <div className="flex items-center gap-2 mb-8 sm:mb-12 border-b border-slate-200/80 dark:border-white/10 pb-4 sm:pb-6 overflow-x-auto no-scrollbar scroll-smooth flex-nowrap sm:flex-wrap">

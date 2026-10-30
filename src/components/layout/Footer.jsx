@@ -132,30 +132,38 @@ export default function Footer() {
             </h4>
             <ul className="flex flex-col gap-2.5 text-sm text-slate-500 dark:text-slate-400">
               <li>
-                <Link to="/panel" className="hover:text-slate-900 dark:hover:text-white" style={{ transition: 'color 0.15s ease' }}>
+                <Link
+                  to="/panel"
+                  onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                  className="hover:text-pink-600 dark:hover:text-pink-400 transition-colors"
+                >
                   5M+ Global Panel
                 </Link>
               </li>
               <li>
-                <Link to="/panel#sampling" className="hover:text-slate-900 dark:hover:text-white" style={{ transition: 'color 0.15s ease' }}>
+                <Link
+                  to="/panel#sampling"
+                  className="hover:text-pink-600 dark:hover:text-pink-400 transition-colors"
+                >
                   B2B &amp; B2C Sampling
                 </Link>
               </li>
               <li>
-                <Link to="/panel#reach" className="hover:text-slate-900 dark:hover:text-white" style={{ transition: 'color 0.15s ease' }}>
+                <Link
+                  to="/panel#reach"
+                  className="hover:text-pink-600 dark:hover:text-pink-400 transition-colors"
+                >
                   Global Reach (45+ Countries)
                 </Link>
               </li>
               <li>
-                <a
-                  href={COMPANY.panelPlatformUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center gap-1 font-semibold text-pink-600 dark:text-pink-400 hover:text-pink-700 dark:hover:text-pink-300"
-                  style={{ transition: 'color 0.15s ease' }}
+                <Link
+                  to="/get-panel-book"
+                  className="inline-flex items-center gap-1 font-semibold text-pink-600 dark:text-pink-400 hover:text-pink-700 dark:hover:text-pink-300 transition-colors mt-0.5"
                 >
-                  Panelist Login <ArrowUpRight className="w-3.5 h-3.5" />
-                </a>
+                  <span>Download Panel Book</span>
+                  <ArrowUpRight className="w-3.5 h-3.5" />
+                </Link>
               </li>
             </ul>
           </div>
@@ -192,38 +200,6 @@ export default function Footer() {
                 </li>
               ))}
             </ul>
-
-            {/* Newsletter */}
-            <div className="rounded-xl border border-slate-200/80 dark:border-white/[0.07] bg-slate-50 dark:bg-white/[0.02] p-4">
-              <p className="text-xs font-semibold text-slate-900 dark:text-white mb-3">
-                Market Intelligence Brief
-              </p>
-              {emailSubscribed ? (
-                <div className="flex items-center gap-2 text-xs text-emerald-600 dark:text-emerald-400 font-medium">
-                  <CheckCircle2 className="w-4 h-4 shrink-0" />
-                  Subscribed to research briefings.
-                </div>
-              ) : (
-                <form onSubmit={handleSubscribe} className="flex gap-2">
-                  <input
-                    type="email"
-                    required
-                    placeholder="name@company.com"
-                    value={subEmail}
-                    onChange={(e) => setSubEmail(e.target.value)}
-                    className="form-input py-2.5 text-xs min-h-[44px]"
-                    aria-label="Email for newsletter"
-                  />
-                  <button
-                    type="submit"
-                    className="shrink-0 px-4 py-2.5 rounded-lg bg-gradient-to-r from-pink-600 to-rose-600 text-white text-xs font-semibold hover:from-pink-700 hover:to-rose-700 shadow-sm min-h-[44px]"
-                    style={{ transition: 'all 0.15s ease' }}
-                  >
-                    Join
-                  </button>
-                </form>
-              )}
-            </div>
           </div>
         </div>
 

@@ -1,6 +1,6 @@
 
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 import {
   ArrowUpRight,
   Download,
@@ -9,7 +9,13 @@ import {
   ClipboardCheck,
   Gift,
   MessageCircle,
+  X,
+  Home,
+  CheckCircle2,
+  Loader2,
+  ArrowLeft
 } from "lucide-react";
+import { generatePanelBookPDF } from "../utils/pdfGenerator";
 import AnimatedCounter from "../components/common/AnimatedCounter";
 
 const regions = [
@@ -47,12 +53,47 @@ const trustPoints = [
 ];
 
 export default function PanelPage() {
+  const location = useLocation();
+  const [panelBookModalOpen, setPanelBookModalOpen] = useState(false);
+
+  useEffect(() => {
+    if (location.hash) {
+      const id = location.hash.replace('#', '');
+      const el = document.getElementById(id);
+      if (el) {
+        setTimeout(() => el.scrollIntoView({ behavior: 'smooth' }), 100);
+      }
+    }
+  }, [location.hash, location.pathname]);
+  const [modalForm, setModalForm] = useState({
+    name: '',
+    jobTitle: '',
+    companyName: '',
+    email: '',
+  });
+  const [modalSubmitted, setModalSubmitted] = useState(false);
+  const [modalLoading, setModalLoading] = useState(false);
+
+  const handleModalSubmit = (e) => {
+    e.preventDefault();
+    setModalLoading(true);
+
+    setTimeout(() => {
+      try {
+        generatePanelBookPDF();
+      } catch (err) {
+        console.error('Error generating PDF:', err);
+      }
+      setModalLoading(false);
+      setModalSubmitted(true);
+    }, 600);
+  };
+
   return (
     <main className="relative w-full min-w-0 overflow-x-clip bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-100">
 
       {/* HERO SECTION — FULL VIEWPORT HEIGHT */}
-      <section
-        className="relative isolate flex min-h-[100vh] min-h-[100svh] w-full flex-col justify-center overflow-hidden border-b border-white/10"
+      <section id="panel-hero" className="relative isolate flex min-h-[100vh] min-h-[100svh] w-full flex-col justify-center overflow-hidden border-b border-white/10"
         style={{
           paddingTop: "clamp(8rem, 14vh, 10rem)",
           paddingBottom: "clamp(2rem, 4vh, 3rem)",
@@ -198,8 +239,9 @@ export default function PanelPage() {
       </section>
 
       {/* PANEL OVERVIEW */}
+      <div id="sampling" className="scroll-mt-24" />
       <section
-        id="panel-overview"
+        id="panel-overview" data-alias="sampling"
         className="relative scroll-mt-24 border-y border-slate-200/80 bg-white py-12 sm:py-16 lg:py-12 dark:border-white/5 dark:bg-slate-900"
       >
         <div className="pointer-events-none absolute -left-20 top-24 h-64 w-64 rounded-full border-[24px] border-pink-100/70 dark:border-pink-400/10" />
@@ -277,7 +319,7 @@ export default function PanelPage() {
       </section>
 
       {/* GLOBAL REACH */}
-      <section className="border-b border-slate-200/80 bg-slate-50 py-12 sm:py-16 lg:py-12 dark:border-white/5 dark:bg-slate-950">
+      <section id="reach" className="scroll-mt-24 border-b border-slate-200/80 bg-slate-50 py-12 sm:py-16 lg:py-12 dark:border-white/5 dark:bg-slate-950">
         <div className="mx-auto grid max-w-7xl items-center gap-10 px-5 sm:px-6 lg:grid-cols-2 lg:gap-12 lg:px-8">
           <div>
             <span className="text-xs font-bold uppercase tracking-[0.2em] text-pink-600 dark:text-pink-400">
@@ -386,42 +428,198 @@ export default function PanelPage() {
         </div>
       </section>
 
-      {/* PANEL BOOK + PLATFORM CTA */}
-      <section className="w-full">
+      {/* =========================================================================
+          PANEL BOOK DUAL SPLIT BANNER (MATCHING IMAGE 1)
+         ========================================================================= */}
+      <section className="grid grid-cols-1 lg:grid-cols-12 w-full border-t border-slate-200/80 dark:border-white/10">
 
-        {null}
-
-        {/* Community CTA */}
-        <div className="relative flex min-h-[200px] flex-col justify-center overflow-hidden bg-slate-900 p-6 text-white sm:p-10 lg:min-h-[220px] lg:p-14 dark:bg-black">
-          <div className="absolute -bottom-20 -right-20 h-72 w-72 rounded-full bg-pink-500/20 blur-3xl" />
-          <div className="absolute -right-10 top-0 h-48 w-48 rounded-full bg-purple-500/10 blur-3xl" />
-
-          <div className="relative mx-auto max-w-3xl text-center">
-            <div className="mb-5 mx-auto flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-white/5">
-              <MessageCircle className="h-6 w-6 text-pink-300" />
+        {/* Left Side: Vibrant Pink "DOWNLOAD OUR PANEL BOOK" */}
+        <div className="lg:col-span-6 bg-[#d91b5c] p-8 sm:p-12 lg:p-16 flex flex-col justify-between text-white relative overflow-hidden min-h-[320px] sm:min-h-[360px]">
+          <div>
+            {/* Document download icon matching Image 1 */}
+            <div className="mb-6">
+              <svg className="w-14 h-18 sm:w-16 sm:h-20 text-white" viewBox="0 0 24 28" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M4 2h10l6 6v18a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z" />
+                <polyline points="14 2 14 8 20 8" />
+                <path d="M12 12v7" />
+                <path d="m8.5 15.5 3.5 3.5 3.5-3.5" />
+              </svg>
             </div>
 
-            <h2 className="mx-auto max-w-xl text-2xl font-extrabold leading-tight sm:text-3xl">
-              Your opinions shape the world around us.
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-display font-extrabold uppercase tracking-tight !text-white leading-tight max-w-md">
+              DOWNLOAD OUR PANEL BOOK
             </h2>
+          </div>
 
-            <p className="mx-auto mt-4 max-w-xl text-sm leading-7 text-slate-300">
-              Your voice has value. Join a research community where opinions
-              help influence products, services, and businesses.
-            </p>
-
-            <a
-              href="https://elicitresearch.com"
-              target="_blank"
-              rel="noreferrer"
-              className="mt-7 inline-flex items-center gap-3 rounded-xl bg-gradient-to-r from-pink-600 to-rose-600 px-5 py-3.5 text-sm font-bold text-white shadow-lg transition hover:-translate-y-0.5 hover:from-pink-700 hover:to-rose-700 hover:shadow-pink-500/25 active:scale-95"
+          <div className="pt-6 sm:pt-8 mt-6">
+            <button
+              type="button"
+              onClick={() => {
+                setModalSubmitted(false);
+                setPanelBookModalOpen(true);
+              }}
+              className="text-base sm:text-lg font-semibold !text-white hover:underline inline-flex items-center gap-1.5 focus:outline-none transition-all group"
             >
-              Visit Our Panel Platform
-              <ArrowUpRight className="h-4 w-4" />
-            </a>
+              <span>Download</span>
+              <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            </button>
           </div>
         </div>
+
+        {/* Right Side: Clean White Background "Your opinions shape the world around us." */}
+        <div className="lg:col-span-6 bg-white dark:bg-slate-900 border-t lg:border-t-0 lg:border-l border-slate-200 dark:border-white/10 p-8 sm:p-12 lg:p-16 flex flex-col justify-between text-slate-900 dark:text-white relative overflow-hidden min-h-[320px] sm:min-h-[360px]">
+          <div>
+            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-3.5xl font-display font-bold text-slate-900 dark:text-white leading-snug sm:leading-snug max-w-xl">
+              Your opinions shape the world around us. Your voice has a value that influences products, services and businesses
+            </h2>
+          </div>
+
+          <div className="pt-6 sm:pt-8 mt-6">
+            <Link
+              to="/panel"
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              className="inline-flex items-center justify-center px-7 py-3.5 rounded-full bg-[#d91b5c] hover:bg-[#c21850] text-white font-semibold text-sm sm:text-base shadow-md transition-all active:scale-95"
+            >
+              Visit our panel platform
+            </Link>
+          </div>
+        </div>
+
       </section>
+
+      {/* =========================================================================
+          GET PANEL BOOK MODAL (MATCHING IMAGE 2)
+         ========================================================================= */}
+      {panelBookModalOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm p-4 animate-in fade-in duration-200"
+          onClick={() => setPanelBookModalOpen(false)}
+        >
+          <div
+            className="relative w-full max-w-3xl bg-white dark:bg-slate-900 rounded-3xl shadow-2xl overflow-hidden border border-slate-200 dark:border-white/10 p-6 sm:p-10"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Close button */}
+            <button
+              onClick={() => setPanelBookModalOpen(false)}
+              className="absolute top-5 right-5 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 dark:bg-white/10 dark:hover:bg-white/20 flex items-center justify-center text-slate-600 dark:text-slate-300 transition-colors"
+            >
+              <X className="w-4 h-4" />
+            </button>
+
+            {/* Header */}
+            <div className="text-center mb-8">
+              <h2 className="text-2xl sm:text-4xl font-display font-extrabold text-[#d91b5c]">
+                Get Panel Book
+              </h2>
+              <div className="mt-3 inline-flex items-center gap-2 rounded-full bg-slate-100 dark:bg-slate-800 px-4 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-white/10 shadow-xs">
+                <Link to="/" className="flex items-center gap-1 hover:text-[#d91b5c]">
+                  <Home className="w-3.5 h-3.5" />
+                  <span>Home</span>
+                </Link>
+                <span className="text-slate-400">/</span>
+                <span className="text-[#d91b5c]">Get Panel Book</span>
+              </div>
+            </div>
+
+            {modalSubmitted ? (
+              <div className="text-center py-6 space-y-4">
+                <div className="w-14 h-14 rounded-full bg-emerald-100 text-emerald-600 mx-auto flex items-center justify-center">
+                  <CheckCircle2 className="w-7 h-7" />
+                </div>
+                <h3 className="text-xl font-display font-bold text-slate-900 dark:text-white">
+                  Thank You, {modalForm.name || 'Partner'}!
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-md mx-auto">
+                  Your official <strong>Elicit Research Global Panel Book</strong> has been generated and downloaded.
+                </p>
+                <div className="pt-2 flex justify-center gap-3">
+                  <button
+                    type="button"
+                    onClick={() => generatePanelBookPDF()}
+                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#d91b5c] hover:bg-[#c21850] text-white font-semibold text-xs transition-all shadow-sm"
+                  >
+                    <Download className="w-3.5 h-3.5" />
+                    <span>Download Again</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setPanelBookModalOpen(false)}
+                    className="px-5 py-2.5 rounded-full bg-slate-100 dark:bg-white/10 text-slate-700 dark:text-slate-200 font-semibold text-xs transition-all"
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <form onSubmit={handleModalSubmit} className="space-y-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
+                  <div>
+                    <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1.5">
+                      Your Name <span className="text-[#d91b5c]">(required)</span>
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={modalForm.name}
+                      onChange={(e) => setModalForm({ ...modalForm, name: e.target.value })}
+                      className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-white/10 rounded-full px-4 py-2.5 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-[#d91b5c]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1.5">
+                      Job Title
+                    </label>
+                    <input
+                      type="text"
+                      value={modalForm.jobTitle}
+                      onChange={(e) => setModalForm({ ...modalForm, jobTitle: e.target.value })}
+                      className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-white/10 rounded-full px-4 py-2.5 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-[#d91b5c]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1.5">
+                      Company Name
+                    </label>
+                    <input
+                      type="text"
+                      value={modalForm.companyName}
+                      onChange={(e) => setModalForm({ ...modalForm, companyName: e.target.value })}
+                      className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-white/10 rounded-full px-4 py-2.5 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-[#d91b5c]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1.5">
+                      Your Official Email <span className="text-[#d91b5c]">(required)</span>
+                    </label>
+                    <input
+                      type="email"
+                      required
+                      value={modalForm.email}
+                      onChange={(e) => setModalForm({ ...modalForm, email: e.target.value })}
+                      className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-white/10 rounded-full px-4 py-2.5 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-[#d91b5c]"
+                    />
+                  </div>
+                </div>
+
+                <div className="pt-2">
+                  <button
+                    type="submit"
+                    disabled={modalLoading}
+                    className="px-8 py-2.5 rounded-full bg-[#d91b5c] hover:bg-[#c21850] active:scale-95 text-white font-semibold text-sm transition-all shadow-md shadow-pink-600/20 disabled:opacity-50 inline-flex items-center gap-2"
+                  >
+                    {modalLoading && <Loader2 className="w-4 h-4 animate-spin" />}
+                    <span>Submit</span>
+                  </button>
+                </div>
+              </form>
+            )}
+          </div>
+        </div>
+      )}
     </main>
   );
 }

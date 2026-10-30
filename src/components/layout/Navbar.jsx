@@ -121,12 +121,11 @@ export default function Navbar() {
 
   const closeMenu = () => setIsOpen(false);
 
-  /* ── Header classes ── */
+  /* ── Header classes — 100% Opacity Solid ── */
   const headerClass = [
-    'fixed top-0 left-0 right-0 z-50 border-b border-slate-200/80 dark:border-white/[0.08] shadow-sm',
-    scrolled
-      ? 'bg-white/98 dark:bg-brand-950/98 backdrop-blur-xl py-2.5 sm:py-3'
-      : 'bg-white/95 dark:bg-brand-950/90 backdrop-blur-md py-3 sm:py-3.5',
+    'fixed top-0 left-0 right-0 z-50 border-b border-slate-200/90 dark:border-white/10 shadow-sm transition-all duration-200 opacity-100',
+    'bg-white dark:bg-slate-900',
+    scrolled ? 'py-2 sm:py-2.5' : 'py-2.5 sm:py-3.5',
   ].join(' ');
 
   return (

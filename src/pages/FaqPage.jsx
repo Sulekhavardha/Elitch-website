@@ -1,167 +1,255 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { FAQ_DATA, COMPANY } from '../data/companyData';
 import {
   HelpCircle,
   ChevronDown,
   Search,
   Mail,
-  ArrowUpRight,
+  ArrowRight,
+  MessageSquare,
   Sparkles,
-  ShieldCheck
+  CheckCircle2,
+  X
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import ScrollReveal from '../components/common/ScrollReveal';
-import { HERO_IMAGES, ABOUT_IMAGES } from '../data/imageAssets';
 
 export default function FaqPage() {
   const [searchQuery, setSearchQuery] = useState('');
-  const [expandedIndex, setExpandedIndex] = useState('0-0');
+  const [activeCategory, setActiveCategory] = useState('All');
+  const [expandedIndex, setExpandedIndex] = useState(0); // first item open by default
 
-  const toggleAccordion = (id) => {
-    setExpandedIndex(expandedIndex === id ? null : id);
+  // Flatten questions with category metadata
+  const allQuestions = useMemo(() => {
+    return FAQ_DATA.flatMap((cat, catIdx) =>
+      cat.questions.map((q, qIdx) => ({
+        ...q,
+        category: cat.category,
+        id: `${catIdx}-${qIdx}`,
+      }))
+    );
+  }, []);
+
+  // Filtered by Search Query & Selected Category
+  const filteredQuestions = useMemo(() => {
+    return allQuestions.filter((item) => {
+      const matchesCategory =
+        activeCategory === 'All' || item.category === activeCategory;
+      const matchesSearch =
+        item.q.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.a.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.category.toLowerCase().includes(searchQuery.toLowerCase());
+      return matchesCategory && matchesSearch;
+    });
+  }, [allQuestions, activeCategory, searchQuery]);
+
+  const toggleAccordion = (idx) => {
+    setExpandedIndex(expandedIndex === idx ? null : idx);
   };
 
   return (
-    <div className="relative pt-16">
-      {/* Background glow */}
-      <div className="absolute top-0 right-1/3 w-[750px] h-[450px] bg-pink-300/15 dark:bg-pink-500/10 rounded-full blur-3xl pointer-events-none"></div>
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 pt-20 pb-20">
+      
+      {/* Background ambient lighting */}
+      <div className="pointer-events-none absolute inset-0 -z-0 overflow-hidden">
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[750px] h-[450px] bg-gradient-to-b from-pink-300/15 via-purple-300/10 to-transparent dark:from-pink-500/10 dark:via-purple-500/5 rounded-full blur-3xl" />
+      </div>
 
-      {/* Header with Knowledge Base banner */}
-      <section className="relative pt-0 pb-0 border-b border-slate-200/80 dark:border-white/5 overflow-hidden">
-        <div className="relative w-full h-[380px] sm:h-[440px] overflow-hidden group">
-          <img
-            src={HERO_IMAGES.globalNetwork.url}
-            alt={HERO_IMAGES.globalNetwork.alt}
-            className="w-full h-full object-cover object-center transition-transform duration-1000 group-hover:scale-105"
-            loading="eager"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-900/90 via-slate-900/65 to-slate-900/25 dark:from-slate-950/95 dark:via-slate-950/75 dark:to-slate-950/30" />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-transparent to-transparent dark:from-slate-950/80" />
-
-          <div className="absolute inset-0 flex items-center">
-            <div className="max-w-7xl mx-auto px-6 w-full">
-              <div className="max-w-3xl space-y-6 pt-6">
-                <div className="flex items-center gap-2 text-xs font-mono text-pink-300 dark:text-pink-400">
-                  <Link to="/" className="text-slate-300 hover:text-white transition-colors">Home</Link>
-                  <span className="text-slate-500">/</span>
-                  <span className="px-2 py-0.5 rounded bg-white/10 border border-white/20 text-white">
-                    Knowledge Base
-                  </span>
-                </div>
-
-                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-display font-extrabold text-white tracking-tight leading-tight">
-                  Frequently Asked <br />
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-purple-300 to-rose-300">
-                    Questions.
-                  </span>
-                </h1>
-
-                <p className="text-slate-200 text-base sm:text-lg leading-relaxed">
-                  Everything you need to know about our 5M+ panel recruitment, anti-fraud scrubbing, turnaround SLAs, and survey engineering workflows.
-                </p>
-
-                {/* Search Input */}
-                <div className="relative max-w-lg">
-                  <Search className="w-5 h-5 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2" />
-                  <input
-                    type="text"
-                    placeholder="Search panel capabilities, turnaround times, compliance..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full bg-white/95 dark:bg-slate-900/95 border border-white/20 dark:border-white/10 rounded-2xl pl-12 pr-4 py-3.5 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-pink-400 focus:ring-2 focus:ring-pink-500/20 shadow-md transition-all"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Accordion List */}
-      <section className="py-12 sm:py-16 lg:py-12 bg-slate-50 dark:bg-slate-950">
-        <div className="max-w-4xl mx-auto px-6 space-y-12">
-          {FAQ_DATA.map((cat, catIdx) => {
-            const filteredQuestions = cat.questions.filter(
-              q => q.q.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                q.a.toLowerCase().includes(searchQuery.toLowerCase())
-            );
-
-            if (filteredQuestions.length === 0) return null;
-
-            return (
-              <ScrollReveal key={cat.category} animation="fade-up" duration={600} className="space-y-4">
-                <h2 className="text-lg font-display font-bold text-pink-700 dark:text-pink-400 tracking-wide uppercase text-xs flex items-center gap-2">
-                  <ShieldCheck className="w-4 h-4 text-pink-600 dark:text-pink-400" />
-                  {cat.category}
-                </h2>
-
-                <div className="space-y-3">
-                  {filteredQuestions.map((item, qIdx) => {
-                    const uniqueId = `${catIdx}-${qIdx}`;
-                    const isExpanded = expandedIndex === uniqueId;
-
-                    return (
-                      <div
-                        key={qIdx}
-                        className="glass-card rounded-2xl border border-slate-200/80 dark:border-white/10 shadow-sm overflow-hidden bg-white/90 dark:bg-white/[0.02] transition-colors"
-                      >
-                        <button
-                          onClick={() => toggleAccordion(uniqueId)}
-                          className="w-full p-5 text-left flex items-center justify-between gap-4 hover:bg-slate-50/80 dark:hover:bg-white/[0.02] transition-colors"
-                        >
-                          <span className="font-display font-semibold text-slate-900 dark:text-white text-sm sm:text-base">
-                            {item.q}
-                          </span>
-                          <ChevronDown className={`w-4 h-4 text-pink-600 dark:text-pink-400 shrink-0 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`} />
-                        </button>
-
-                        {isExpanded && (
-                          <div className="px-5 pb-5 pt-1 text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed border-t border-slate-100 dark:border-white/5 bg-slate-50/50 dark:bg-transparent animate-in fade-in duration-200">
-                            {item.a}
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              </ScrollReveal>
-            );
-          })}
-
-          {/* Unanswered Questions Callout with Advisor Avatar */}
-          <div className="glass-card rounded-3xl p-8 border border-slate-200/80 dark:border-white/10 shadow-md flex flex-col sm:flex-row items-center justify-between gap-6 mt-16 bg-white dark:bg-slate-900/90">
-            <div className="flex items-center gap-4">
-              <div className="w-14 h-14 rounded-2xl overflow-hidden shrink-0 border-2 border-pink-400/40 shadow-sm">
-                <img
-                  src={ABOUT_IMAGES.leadershipGovernance.url}
-                  alt={ABOUT_IMAGES.leadershipGovernance.alt}
-                  className="w-full h-full object-cover object-center"
-                  loading="lazy"
-                />
-              </div>
-              <div>
-                <h3 className="text-lg font-display font-bold text-slate-900 dark:text-white mb-1">
-                  Have a specialized research question?
-                </h3>
-                <p className="text-xs text-slate-600 dark:text-slate-400">
-                  Our survey architects and bidding specialists are available directly at <span className="text-pink-700 dark:text-pink-400 font-mono font-semibold">{COMPANY.emails.rfq}</span>.
-                </p>
-              </div>
-            </div>
-
-            <Link
-              to="/contact?type=general"
-              className="px-6 py-3 rounded-xl bg-gradient-to-r from-pink-600 to-rose-600 hover:from-pink-700 hover:to-rose-700 text-white font-bold text-xs shadow-md transition-all shrink-0 inline-flex items-center gap-1.5 active:scale-95"
-            >
-              <span>Contact Bidding Desk</span>
-              <ArrowUpRight className="w-4 h-4" />
+      <div className="max-w-4xl mx-auto px-5 sm:px-6 lg:px-8 relative z-10">
+        
+        {/* =========================================================================
+            HEADER & SEARCH BAR
+           ========================================================================= */}
+        <div className="text-center space-y-4 pt-6 sm:pt-10 mb-8 sm:mb-12">
+          
+          {/* Breadcrumb */}
+          <div className="inline-flex items-center gap-2 text-xs font-mono text-slate-500 dark:text-slate-400">
+            <Link to="/" className="text-slate-600 hover:text-pink-600 dark:text-slate-400 dark:hover:text-white transition-colors">
+              Home
             </Link>
+            <span>/</span>
+            <span className="px-3 py-1 rounded-full bg-pink-100 text-pink-700 border border-pink-200 dark:bg-pink-950/60 dark:text-pink-300 dark:border-pink-800/50 font-semibold text-[11px]">
+              Knowledge Base
+            </span>
+          </div>
+
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-display font-extrabold text-slate-900 dark:text-white tracking-tight leading-tight">
+            Frequently Asked{' '}
+            <span className="bg-gradient-to-r from-pink-600 via-purple-600 to-rose-600 dark:from-pink-400 dark:via-purple-300 dark:to-cyan-300 bg-clip-text text-transparent">
+              Questions
+            </span>
+          </h1>
+
+          <p className="text-slate-600 dark:text-slate-300 text-sm sm:text-base max-w-xl mx-auto leading-relaxed">
+            Quick, transparent answers about our global sampling panel, turnaround times, automated survey engines, and data security.
+          </p>
+
+          {/* Search Input Box */}
+          <div className="relative max-w-xl mx-auto pt-4">
+            <div className="relative flex items-center">
+              <Search className="w-5 h-5 text-slate-400 absolute left-4 pointer-events-none" />
+              <input
+                type="text"
+                placeholder="Search questions by keyword: e.g. 'B2B', 'turnaround', 'fraud', 'pricing'..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-2xl pl-12 pr-10 py-3.5 sm:py-4 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-pink-500 focus:ring-4 focus:ring-pink-500/10 shadow-sm transition-all"
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery('')}
+                  className="absolute right-3.5 p-1 rounded-full hover:bg-slate-100 dark:hover:bg-white/10 text-slate-400"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* Category Filter Pills */}
+          <div className="flex flex-wrap items-center justify-center gap-2 pt-4">
+            {['All', ...FAQ_DATA.map((c) => c.category)].map((cat) => (
+              <button
+                key={cat}
+                type="button"
+                onClick={() => {
+                  setActiveCategory(cat);
+                  setExpandedIndex(0);
+                }}
+                className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all ${
+                  activeCategory === cat
+                    ? 'bg-pink-600 text-white shadow-md shadow-pink-600/20'
+                    : 'bg-white hover:bg-slate-100 dark:bg-slate-900 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-white/10'
+                }`}
+              >
+                {cat === 'All' ? 'All Topics' : cat.split(' & ')[0]}
+              </button>
+            ))}
           </div>
 
         </div>
-      </section>
 
+        {/* =========================================================================
+            QUESTIONS & ANSWERS ACCORDION LIST
+           ========================================================================= */}
+        <div className="space-y-3 sm:space-y-4">
+          {filteredQuestions.length === 0 ? (
+            <div className="text-center py-12 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-white/10 p-8 space-y-3">
+              <HelpCircle className="w-10 h-10 text-slate-400 mx-auto" />
+              <h3 className="text-base font-bold text-slate-900 dark:text-white">
+                No matching questions found
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-500 max-w-sm mx-auto">
+                Try searching for a different keyword or contact our research desk directly.
+              </p>
+              <button
+                type="button"
+                onClick={() => {
+                  setSearchQuery('');
+                  setActiveCategory('All');
+                }}
+                className="mt-2 px-4 py-2 rounded-xl bg-pink-50 text-pink-600 hover:bg-pink-100 text-xs font-semibold transition-colors"
+              >
+                Clear Search Filter
+              </button>
+            </div>
+          ) : (
+            filteredQuestions.map((item, idx) => {
+              const isOpen = expandedIndex === idx;
+
+              return (
+                <div
+                  key={item.id}
+                  className={`rounded-2xl border transition-all duration-300 overflow-hidden ${
+                    isOpen
+                      ? 'bg-white dark:bg-slate-900 border-pink-500/40 shadow-md shadow-pink-500/5'
+                      : 'bg-white/80 dark:bg-slate-900/60 border-slate-200 dark:border-white/10 hover:border-slate-300 dark:hover:border-white/20'
+                  }`}
+                >
+                  {/* Question Button */}
+                  <button
+                    type="button"
+                    onClick={() => toggleAccordion(idx)}
+                    className="w-full text-left px-5 sm:px-6 py-4 sm:py-5 flex items-center justify-between gap-4 transition-colors focus:outline-none"
+                    aria-expanded={isOpen}
+                  >
+                    <div className="flex items-center gap-3.5 min-w-0">
+                      <div
+                        className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 transition-colors ${
+                          isOpen
+                            ? 'bg-pink-600 text-white shadow-sm'
+                            : 'bg-pink-50 text-pink-600 dark:bg-white/10 dark:text-pink-400'
+                        }`}
+                      >
+                        <HelpCircle className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <span className="text-[11px] font-mono text-pink-600 dark:text-pink-400 font-bold block mb-0.5">
+                          {item.category}
+                        </span>
+                        <span className="text-sm sm:text-base font-display font-bold text-slate-900 dark:text-white leading-snug">
+                          {item.q}
+                        </span>
+                      </div>
+                    </div>
+
+                    <ChevronDown
+                      className={`w-5 h-5 shrink-0 text-slate-400 transition-transform duration-300 ${
+                        isOpen ? 'rotate-180 text-pink-600 dark:text-pink-400' : ''
+                      }`}
+                    />
+                  </button>
+
+                  {/* Answer Box */}
+                  {isOpen && (
+                    <div className="px-5 sm:px-6 pb-5 pt-1 text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed border-t border-slate-100 dark:border-white/5 animate-in fade-in duration-200">
+                      <div className="p-4 rounded-xl bg-slate-50 dark:bg-white/[0.02] border border-slate-100 dark:border-white/5">
+                        {item.a}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            })
+          )}
+        </div>
+
+        {/* =========================================================================
+            BOTTOM CONTACT & ASSISTANCE CARD
+           ========================================================================= */}
+        <div className="mt-12 sm:mt-16 p-6 sm:p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-2xl bg-pink-100 dark:bg-pink-950/60 text-pink-600 dark:text-pink-400 flex items-center justify-center shrink-0">
+              <MessageSquare className="w-6 h-6" />
+            </div>
+            <div>
+              <h3 className="text-base sm:text-lg font-display font-bold text-slate-900 dark:text-white">
+                Still have questions?
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mt-0.5">
+                Our research directors are ready to assist with custom sample feasibility and methodology.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3 shrink-0">
+            <Link
+              to="/contact?type=quote"
+              className="px-5 py-2.5 rounded-full bg-pink-600 hover:bg-pink-700 text-white font-semibold text-xs sm:text-sm shadow-md transition-all active:scale-95"
+            >
+              Contact Us
+            </Link>
+            <a
+              href={`mailto:${COMPANY.emails.rfq}`}
+              className="px-5 py-2.5 rounded-full bg-slate-100 hover:bg-slate-200 dark:bg-white/10 dark:hover:bg-white/15 text-slate-700 dark:text-slate-200 font-semibold text-xs sm:text-sm transition-all"
+            >
+              Email RFQ Desk
+            </a>
+          </div>
+        </div>
+
+      </div>
     </div>
   );
 }
-

@@ -596,32 +596,14 @@ a, button, [role="button"] {
 
 /* Navbar height tokens — the fixed header includes an info bar on lg+ screens */
 :root {
-  --navbar-height: 76px;          /* Mobile / tablet: main bar only */
-  --navbar-height-desktop: 120px; /* Desktop lg+: info bar + main bar */
+  --navbar-height: 54px;          /* Mobile / tablet: compact main bar */
+  --navbar-height-desktop: 110px; /* Desktop lg+: info bar + main bar */
 }
 
-/* Hero section positioning — clears the fixed navbar */
+/* Hero section positioning — matching Panel page 100vh viewport balance */
 .hero-section {
-  padding-top: var(--navbar-height);
-  min-height: 100vh;
-  min-height: 100dvh;
-  display: flex;
-  flex-direction: column;
   width: 100%;
-}
-
-@media (min-width: 1024px) {
-  .hero-section {
-    padding-top: var(--navbar-height-desktop);
-  }
-}
-
-/* Let internal content fill the available hero space */
-.hero-section > .max-w-7xl {
-  flex: 1 1 auto;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  box-sizing: border-box;
 }
 
 .hero-badge {

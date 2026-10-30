@@ -86,25 +86,25 @@ export default function GrowthAnalyticsChart() {
       className="relative w-full rounded-2xl sm:rounded-3xl overflow-hidden bg-transparent border-0 shadow-none transition-all duration-500"
     >
       {/* Top Header Overlay: Subtle website-related text & verified panel tag */}
-      <div className="relative z-20 flex items-center justify-between p-4 sm:p-5 md:p-6 pb-2">
+      <div className="relative z-20 flex items-center justify-between px-2 pt-1 pb-1 sm:p-5 md:p-6 sm:pb-2">
         {/* Left: Subtle website-related branding text */}
         <div className="flex flex-col">
-          <span className="text-[11px] sm:text-xs font-mono font-bold uppercase tracking-widest text-pink-600 dark:text-pink-400 flex items-center gap-1.5">
+          <span className="text-[10px] sm:text-xs font-mono font-bold uppercase tracking-wider sm:tracking-widest text-pink-600 dark:text-pink-400 flex items-center gap-1.5">
             <span className="w-1.5 h-1.5 rounded-full bg-pink-500 animate-pulse" />
             Enterprise Intelligence
           </span>
-          <p className="text-xs sm:text-sm font-display font-semibold text-slate-700 dark:text-slate-200">
+          <p className="text-[11px] sm:text-sm font-display font-semibold text-slate-700 dark:text-slate-200">
             Authentic Data &amp; Growth Insights
           </p>
         </div>
 
         {/* Right: 5M+ Panel badge */}
-        <div className="flex items-center gap-2 bg-pink-500/10 dark:bg-pink-500/20 backdrop-blur-md px-3 sm:px-3.5 py-1.5 rounded-xl border border-pink-500/20">
+        <div className="flex items-center gap-1.5 sm:gap-2 bg-pink-500/10 dark:bg-pink-500/20 backdrop-blur-md px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-lg sm:rounded-xl border border-pink-500/20">
           <span className="relative flex h-2 w-2">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-pink-500 opacity-75" />
             <span className="relative inline-flex rounded-full h-2 w-2 bg-pink-600" />
           </span>
-          <span className="text-xs sm:text-sm font-display font-bold text-slate-800 dark:text-white">
+          <span className="text-[11px] sm:text-sm font-display font-bold text-slate-800 dark:text-white">
             5M+ Panel
           </span>
           <span className="hidden sm:inline text-[10px] font-mono text-pink-600 dark:text-pink-400 uppercase tracking-wider font-semibold">
@@ -114,11 +114,11 @@ export default function GrowthAnalyticsChart() {
       </div>
 
       {/* Responsive Animated SVG Chart Canvas */}
-      <div className="relative w-full px-2 sm:px-4 pb-3 sm:pb-5">
+      <div className="relative w-full px-1 sm:px-4 pt-0 pb-1 sm:pb-3">
         <svg
           viewBox="0 0 600 350"
           preserveAspectRatio="xMidYMid meet"
-          className="w-full h-auto block select-none overflow-visible"
+          className="w-full h-auto block select-none overflow-visible max-h-[135px] sm:max-h-[175px] lg:max-h-none"
         >
           <defs>
             {/* Crisp glowing bar gradient (vibrant pink to rose) */}

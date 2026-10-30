@@ -12,26 +12,26 @@ export default function PrivacyPolicyPage() {
       <section className="relative border-b border-slate-200/80 dark:border-white/10">
         <div className="relative w-full h-[360px] sm:h-[420px] overflow-hidden group">
           <img
-            src={HERO_IMAGES.corporateGlass.url}
+            src="/images/Home/media-generation-privacy-and-policy-k-bhi-image-0-981f3867-a910-460d-84ec-e7a5a6907175.webp"
             alt={HERO_IMAGES.corporateGlass.alt}
             className="w-full h-full object-cover object-center transition-transform duration-1000 group-hover:scale-105"
             loading="eager"
           />
           {/* Multi-stop gradient overlay for crisp readability */}
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/95 via-slate-900/85 to-slate-900/40 dark:from-slate-950/95 dark:via-slate-950/85 dark:to-slate-950/50" />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
+<div className="absolute inset-0 bg-gradient-to-r from-white/60 via-pink-50/50 to-pink-100/30" />
+<div className="absolute inset-0 bg-gradient-to-t from-white/50 via-transparent to-transparent" />
 
           {/* Text Overlay */}
           <div className="absolute inset-0 flex items-center">
             <div className="max-w-4xl mx-auto px-6 w-full">
               <div className="space-y-4 pt-8">
-                <Link to="/" className="inline-flex items-center gap-2 text-xs font-mono text-pink-300 hover:text-white transition-colors font-semibold">
+<Link to="/" className="inline-flex items-center gap-2 text-xs font-mono text-pink-600 hover:text-pink-700 transition-colors font-semibold">
                   <ArrowLeft className="w-3.5 h-3.5" /> Back to Home
                 </Link>
-                <h1 className="text-3xl sm:text-5xl font-display font-extrabold text-white tracking-tight">
+                <h1 className="text-3xl sm:text-5xl font-display font-extrabold text-slate-900 tracking-tight">
                   Global Privacy Policy &amp; Data Governance
                 </h1>
-                <p className="text-xs font-mono text-slate-300">
+                <p className="text-xs font-mono text-slate-600">
                   Last Updated &amp; Certified: October 2026 | Compliant with EU GDPR, UK DPA, and California CCPA/CPRA
                 </p>
               </div>

@@ -20,6 +20,7 @@ import CareersPage from './pages/CareersPage';
 import FaqPage from './pages/FaqPage';
 import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
 import TermsPage from './pages/TermsPage';
+import GetPanelBookPage from './pages/GetPanelBookPage';
 import NotFoundPage from './pages/NotFoundPage';
 
 // Real Estate Showcase Pages
@@ -75,6 +76,7 @@ export default function App() {
                 <Route path="/faq" element={<FaqPage />} />
                 <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
                 <Route path="/terms" element={<TermsPage />} />
+                <Route path="/get-panel-book" element={<GetPanelBookPage />} />
 
                 {/* Vardha Real Estate Public Showcase Routes */}
 

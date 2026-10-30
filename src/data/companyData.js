@@ -76,9 +76,9 @@ export const COMPANY = {
   ],
   panelPlatformUrl: "https://portal.elicitresearch.com", // Verified panelist portal access
   socials: {
-    linkedin: "https://www.linkedin.com/company/elicit-research",
-    facebook: "https://www.facebook.com/elicitresearch",
-    instagram: "https://www.instagram.com/elicitresearch",
+    linkedin: "https://www.linkedin.com/company/elicitresearch",
+    facebook: "https://www.facebook.com/businesswithelicit",
+    instagram: "https://www.instagram.com/elicit_research/",
     twitter: "https://x.com/elicitresearch"
   }
 };
@@ -388,6 +388,40 @@ export const CAREER_OPENINGS = [
 ];
 
 export const FAQ_DATA = [
+  {
+    category: "Global Footprint & Expertise",
+    questions: [
+      {
+        q: "What is Elicit Research's global footprint and expert team strength?",
+        a: "We maintain an active operational presence across 30+ countries, delivering empirical insights for over 60+ enterprise clients globally. Our international team consists of 130+ dedicated market research specialists, survey engineers, and data analysts providing 24/7 cross-border coverage."
+      },
+      {
+        q: "How does Elicit Research translate client vision into tangible action?",
+        a: "We combine accurate audience measurement, automated techno-research tools, and global scaling strategies. We connect you directly with the verified people who matter most to your brand, empowering your market concepts to become both socially compelling and commercially successful."
+      },
+      {
+        q: "What does 'Select our Clientship' mean and how does the partnership work?",
+        a: "Selecting our Clientship represents an agile, strategic partnership designed to skyrocket your business to the next level. Clients receive dedicated senior account directors, rapid RFQ feasibility turnaround within 2 business hours, guaranteed data authenticity, and transparent, volume-tiered rate cards."
+      }
+    ]
+  },
+  {
+    category: "Services & Automated Tools",
+    questions: [
+      {
+        q: "What practices are included in Elicit Research's comprehensive services portfolio?",
+        a: "Our portfolio spans 10 specialized core practices: Survey Programming, Performance Tracking, Research Design, Qualitative Research, Customer Segmentation, Customer Journey Mapping, Communication Strategy, Cultural Insights, B2B Surveys, and Compounding Growth Strategy."
+      },
+      {
+        q: "What automated tools and techno-research capabilities do you provide?",
+        a: "We replace manual, legacy research workflows with our proprietary techno-research platform. This includes automated respondent routing, real-time feasibility and incidence rate calculators, automated survey launch APIs, and live telemetry dashboards that deliver the data that truly matters."
+      },
+      {
+        q: "How do you conduct accurate audience measurement for niche target groups?",
+        a: "We employ deep algorithmic profiling across our 5M+ proprietary panel alongside custom offline recruitment teams, ensuring verified representation across niche B2B decision-makers, verified healthcare professionals, and targeted consumer demographics."
+      }
+    ]
+  },
   {
     category: "Sampling & Panel Quality",
     questions: [

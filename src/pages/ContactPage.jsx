@@ -129,10 +129,10 @@ export default function ContactPage() {
         <div className="pointer-events-none absolute -right-32 bottom-0 h-96 w-96 rounded-full bg-indigo-500/[0.07] blur-3xl" />
 
         <div className="section-container relative z-10">
-          <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-12 lg:gap-12">
+          <div className="flex flex-col lg:grid lg:grid-cols-12 items-start gap-8 lg:gap-12">
 
             {/* LEFT: CONTACT INFORMATION */}
-            <div className="space-y-5 lg:col-span-5">
+            <div className="order-2 lg:order-1 w-full space-y-5 lg:col-span-5">
 
               {/* Corporate Headquarters */}
               <article className="card-base rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm transition-all duration-300 hover:border-purple-300 hover:shadow-lg hover:shadow-purple-500/[0.05] dark:border-white/[0.08] dark:bg-slate-900/80 dark:hover:border-purple-400/30 sm:p-8">
@@ -194,7 +194,7 @@ export default function ContactPage() {
             </div>
 
             {/* RIGHT: RFQ FORM */}
-            <div className="min-w-0 lg:col-span-7">
+            <div className="order-1 lg:order-2 w-full min-w-0 lg:col-span-7">
               <div className="rounded-3xl border border-slate-200 bg-white p-1 shadow-xl shadow-slate-900/[0.04] dark:border-white/[0.08] dark:bg-slate-900/80 dark:shadow-black/20">
                 <RfqForm initialType={initialType} />
               </div>
@@ -203,66 +203,7 @@ export default function ContactPage() {
           </div>
         </div>
       </section>
-
-      {/* GLOBAL LOCATIONS */}
-      <section className="section-muted relative overflow-hidden border-t border-slate-200/70 bg-slate-100 py-12 dark:border-white/[0.06] dark:bg-slate-900 sm:py-16">
-        <div className="pointer-events-none absolute -right-24 top-0 h-72 w-72 rounded-full bg-pink-500/[0.07] blur-3xl" />
-        <div className="pointer-events-none absolute -left-24 bottom-0 h-72 w-72 rounded-full bg-indigo-500/[0.07] blur-3xl" />
-
-        <div className="section-container relative z-10">
-          <div className="mx-auto mb-10 max-w-xl text-center">
-            <p className="eyebrow mb-3 flex justify-center !text-pink-700 dark:!text-pink-300">
-              Global Presence
-            </p>
-
-            <h2 className="heading-section !text-slate-900 dark:!text-white">
-              International Operating Centers
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {Object.entries(COMPANY.headquarters).map(([key, hub]) => (
-              <article
-                key={key}
-                className="card-base group flex flex-col overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-pink-300 hover:shadow-xl hover:shadow-pink-500/[0.06] dark:border-white/[0.08] dark:bg-slate-800/60 dark:hover:border-pink-400/30"
-              >
-                {hub.image && (
-                  <div className="relative h-40 overflow-hidden">
-                    <img
-                      src={hub.image.url}
-                      alt={hub.image.alt}
-                      className="h-full w-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
-                      loading="lazy"
-                    />
-
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/10 to-transparent" />
-
-                    <div className="absolute bottom-3 left-3 flex items-center gap-1.5 text-xs font-semibold text-white">
-                      <MapPin className="h-3.5 w-3.5 shrink-0 text-pink-300" />
-                      {hub.city}
-                    </div>
-                  </div>
-                )}
-
-                <div className="flex flex-grow flex-col p-5">
-                  <h3 className="heading-card mb-1 !text-pink-700 dark:!text-pink-300">
-                    {hub.city}
-                  </h3>
-
-                  <p className="body-sm mb-0.5 font-medium !text-slate-800 dark:!text-slate-200">
-                    {hub.address}
-                  </p>
-
-                  <p className="text-xs !text-slate-500 dark:!text-slate-400">
-                    {hub.region}
-                  </p>
-                </div>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-    </main>
+</main>
   );
 }
 

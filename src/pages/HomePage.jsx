@@ -29,7 +29,10 @@ import {
   X,
   Rocket,
   Cpu,
-  Globe
+  Globe,
+  HelpCircle,
+  ChevronDown,
+  ShieldCheck
 } from 'lucide-react';
 
 
@@ -41,7 +44,7 @@ import GrowthAnalyticsChart from '../components/home/GrowthAnalyticsChart';
 import RfqForm from '../components/contact/RfqForm';
 import ScrollReveal from '../components/common/ScrollReveal';
 import CountUp from '../components/common/CountUp';
-import { COMPANY } from '../data/companyData';
+import { COMPANY, FAQ_DATA } from '../data/companyData';
 import { HUB_CITY_IMAGES } from '../data/imageAssets';
 
 // Curated high-resolution Unsplash assets for full-length showcase
@@ -49,15 +52,18 @@ const growthImage = "/pages/home/image1.webp";
 
 export default function HomePage() {
   const [videoOpen, setVideoOpen] = useState(false);
+  const [openFaq, setOpenFaq] = useState(0);
 
   return (
-    <main className="overflow-x-hidden bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-100 min-h-screen pt-16">
+    <main className="relative w-full min-w-0 overflow-x-hidden bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-100 min-h-screen">
       
       {/* =========================================================================
           HERO SECTION — "WE Provide Authentic Data, Credible Insights, & Successful Strategies"
           + Full-Length Expansive Growth Showcase
          ========================================================================= */}
-      <section className="hero-section relative w-full min-h-screen h-screen py-8 sm:py-12 lg:py-16 flex items-center overflow-hidden border-b border-white/5 box-border">
+      <section
+        className="hero-section relative isolate flex flex-col justify-center items-center overflow-hidden border-b border-white/10 w-full min-h-[100dvh] h-[100dvh] lg:h-auto lg:min-h-screen pt-14 pb-3 sm:pt-16 sm:pb-4 lg:pt-[96px] lg:pb-0"
+      >
         
         {/* Subtle background ambient glowing gradients */}
         <div className="pointer-events-none absolute inset-0 -z-10">
@@ -67,20 +73,19 @@ export default function HomePage() {
         {/* Ambient 3D Interactive Canvas Scene */}
         <Hero3DScene className="opacity-60" />
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10 w-full">
+        <div className="relative z-10 mx-auto flex flex-col lg:grid lg:grid-cols-2 items-center justify-center gap-2 sm:gap-4 lg:gap-10 w-full max-w-7xl px-4 sm:px-6 lg:px-8 my-auto lg:py-6">
           
-          {/* Top Hero Editorial Content — two-column on lg+, stacked on mobile */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 items-center gap-8 lg:gap-12">
+          {/* Top Hero Editorial Content — matching PanelPage layout */}
 
             {/* ── LEFT: Heading / Description / CTAs / Trust Bar ── */}
-            <div className="flex flex-col space-y-4 sm:space-y-5 text-center lg:text-left min-w-0">
+            <div className="flex min-w-0 flex-col items-center text-center lg:items-start lg:text-left space-y-2 sm:space-y-4">
 
               {null}
 
               {/* Exact Headline: "WE Provide Authentic Data, Credible Insights, & Successful Strategies" */}
               <ScrollReveal animation="fade-up" delay={100} duration={650}>
-                <h1 className="text-2xl sm:text-3xl md:text-4xl xl:text-[2.65rem] font-display font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.2]">
-                  <span className="inline-block bg-gradient-to-r from-pink-600 to-rose-600 text-white px-2.5 sm:px-3 py-0.5 rounded-lg shadow-xs mr-2 text-lg sm:text-2xl lg:text-3xl align-middle">
+                <h1 className="text-xl xs:text-2xl sm:text-3xl md:text-4xl xl:text-[2.65rem] font-display font-extrabold text-slate-900 dark:text-white leading-[1.2] tracking-tight">
+                  <span className="inline-block bg-gradient-to-r from-pink-600 to-rose-600 text-white px-2 py-0.5 rounded-md sm:rounded-lg shadow-xs mr-1.5 text-xs xs:text-sm sm:text-2xl lg:text-3xl align-middle font-bold">
                     WE
                   </span>
                   <span>Provide Authentic Data,</span>{' '}
@@ -90,18 +95,17 @@ export default function HomePage() {
                 </h1>
               </ScrollReveal>
 
-              {/* Subheadline */}
+              {/* Subheadline — full, comfortable, beautifully proportioned */}
               <ScrollReveal animation="fade-up" delay={200} duration={650}>
-                <p className="max-w-2xl lg:max-w-none mx-auto lg:mx-0 text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
+                <p className="mt-1 sm:mt-3 max-w-xl lg:max-w-none mx-auto lg:mx-0 text-xs sm:text-sm lg:text-base leading-relaxed text-slate-600 dark:text-slate-300">
                   Elicit Research &amp; Insights Inc. empowers enterprise brands with precision B2B and B2C sampling, advanced survey programming, and empirical intelligence that drives compounding growth.
                 </p>
               </ScrollReveal>
 
-              {/* Desktop-only: Primary CTAs + Trust Bar (hidden on mobile) */}
+              {/* Desktop-only: Primary CTAs in left column */}
               <div className="hidden lg:block">
-                {/* Primary CTAs */}
                 <ScrollReveal animation="fade-up" delay={300} duration={650}>
-                  <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center justify-center lg:justify-start gap-3 sm:gap-4">
+                  <div className="pt-2 flex flex-row items-center justify-start gap-3 sm:gap-4">
                     <a
                       href="#rfq-section"
                       className="group inline-flex items-center justify-center gap-2.5 px-6 sm:px-8 py-3.5 sm:py-4 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-pink-600 to-rose-600 hover:from-pink-700 hover:to-rose-700 shadow-md sm:shadow-lg shadow-pink-600/20 hover:shadow-xl transition-all duration-300 transform active:scale-95 text-center"
@@ -119,52 +123,47 @@ export default function HomePage() {
                     </a>
                   </div>
                 </ScrollReveal>
-
-{null}
               </div>
 
             </div>
             {/* ── END LEFT ── */}
 
-            {/* ── RIGHT: Hero Image (light & colorful) ── */}
-             <ScrollReveal animation="fade-up" delay={200} duration={900}>
-              <div className="relative flex items-center justify-center lg:justify-end mt-4 lg:mt-0">
-                <div className="relative w-full max-w-[580px] lg:max-w-none">
+            {/* ── RIGHT: Hero Image + Mobile CTAs directly underneath ── */}
+            <ScrollReveal animation="fade-up" delay={200} duration={900}>
+              <div className="relative flex flex-col items-center justify-center lg:justify-end mt-1.5 sm:mt-2 lg:mt-0">
+                <div className="relative w-full max-w-[340px] xs:max-w-[380px] sm:max-w-[480px] lg:max-w-none mx-auto">
                   <GrowthAnalyticsChart />
+                </div>
+
+                {/* Mobile-only CTAs directly below the chart: Matching PanelPage gaps */}
+                <div className="mt-2.5 sm:mt-4 flex flex-col items-center justify-center gap-2 sm:gap-2.5 w-full lg:hidden">
+                  <a
+                    href="#rfq-section"
+                    className="w-full max-w-[280px] inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-pink-600 to-rose-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-pink-600/20 transition-all duration-300 hover:-translate-y-0.5 hover:from-pink-700 hover:to-rose-700 hover:shadow-xl active:scale-95 text-center"
+                  >
+                    <span>Let's Discuss Project</span>
+                    <ArrowRight className="h-4 w-4 shrink-0" />
+                  </a>
+
+                  <a
+                    href="#services-section"
+                    className="w-full max-w-[280px] inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white/80 px-5 py-3 text-sm font-semibold text-slate-800 shadow-sm backdrop-blur-md transition-all duration-300 hover:bg-slate-100 dark:border-white/10 dark:bg-slate-900/80 dark:text-white dark:hover:bg-white/10 text-center"
+                  >
+                    <span>Explore Our Services</span>
+                    <ArrowUpRight className="h-4 w-4 shrink-0 text-slate-500 dark:text-slate-400" />
+                  </a>
                 </div>
               </div>
             </ScrollReveal>
             {/* ── END RIGHT ── */}
 
-            {/* Mobile-only: stacked full-width CTAs + compliance badges (hidden on lg+) */}
-            <div className="lg:hidden flex flex-col items-center gap-4 mt-6">
-              <div className="flex flex-col w-full max-w-sm gap-3">
-                 <a
-                   href="#rfq-section"
-                   className="group inline-flex w-full items-center justify-center gap-2.5 px-6 py-3.5 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-pink-600 to-rose-600 hover:from-pink-700 hover:to-rose-700 shadow-md sm:shadow-lg shadow-pink-600/20 hover:shadow-xl transition-all duration-300 transform active:scale-95 text-center"
-                >
-                  <span>Let's Discuss Your Project</span>
-                  <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                </a>
-                 <a
-                   href="#services-section"
-                   className="inline-flex w-full items-center justify-center gap-2 px-6 py-3.5 rounded-xl text-sm font-semibold text-slate-700 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white bg-slate-100 hover:bg-slate-200 dark:bg-white/5 dark:hover:bg-white/10 border border-slate-200 dark:border-white/10 backdrop-blur-md transition-all duration-300 shadow-xs text-center"
-                >
-                  <span>Explore Our Services</span>
-                  <ArrowUpRight className="w-4 h-4 text-slate-500 dark:text-slate-400" />
-                </a>
-              </div>
-              {null}
-            </div>
-
           </div>
-        </div>
       </section>
 
       {/* =========================================================================
           SECTION 2: "Insights. Innovation. Impact" & The 3 Stat Blocks (Page 1)
          ========================================================================= */}
-      <section className="relative py-12 sm:py-16 lg:py-12 bg-slate-100 dark:bg-slate-900 overflow-hidden border-b border-white/5">
+      <section className="relative py-12 sm:py-16 lg:py-20 bg-slate-100 dark:bg-slate-900 overflow-hidden border-b border-white/5">
         {/* Ambient */}
         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-pink-500/10 rounded-full blur-3xl pointer-events-none" />
@@ -242,7 +241,7 @@ export default function HomePage() {
          ========================================================================= */}
       <section id="services-section" className="py-12 sm:py-16 lg:py-12 bg-slate-50 dark:bg-slate-950 border-b border-white/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-10 sm:mb-12">
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 sm:gap-6 mb-5 sm:mb-8">
             <ScrollReveal animation="fade-up" duration={600}>
               <div className="max-w-2xl">
                 <span className="text-xs font-mono uppercase tracking-widest text-pink-600 dark:text-pink-400 font-semibold px-3 py-1 rounded-full bg-pink-100 dark:bg-pink-950/60 border border-pink-200 dark:border-pink-800/50 inline-block mb-3">
@@ -336,86 +335,9 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* =========================================================================
-          GLOBAL OPERATING HUBS SHOWCASE WITH CITY UNSPLASH ASSETS
-         ========================================================================= */}
-      <section className="py-12 sm:py-16 lg:py-12 bg-slate-100 dark:bg-slate-900 border-t border-white/5">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="text-center max-w-2xl mx-auto mb-10 sm:mb-14">
-            <span className="text-xs font-mono uppercase tracking-widest text-pink-600 dark:text-pink-400 font-semibold px-3 py-1 rounded-full bg-pink-100 dark:bg-pink-950/60 border border-pink-200 dark:border-pink-800/50 inline-block mb-3">
-              Worldwide Infrastructure
-            </span>
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-display font-bold text-slate-900 dark:text-white">
-              Global Operating Hubs
-            </h2>
-            <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-2">
-              Strategic presences across the Americas, EMEA, and Asia-Pacific ensuring continuous 24/7 project coverage.
-            </p>
-          </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-            {[
-              {
-                city: "New York",
-                region: "North American Headquarters",
-                address: COMPANY.headquarters.us.address,
-                image: HUB_CITY_IMAGES.us.url
-              },
-              {
-                city: "London",
-                region: "EMEA Headquarters",
-                address: COMPANY.headquarters.uk.address,
-                image: HUB_CITY_IMAGES.uk.url
-              },
-              {
-                city: "Singapore",
-                region: "Asia-Pacific Headquarters",
-                address: COMPANY.headquarters.asia.address,
-                image: HUB_CITY_IMAGES.asia.url
-              },
-              {
-                city: "Bengaluru",
-                region: "Global Engineering & Sampling Center",
-                address: COMPANY.headquarters.india.address,
-                image: HUB_CITY_IMAGES.india.url
-              }
-            ].map((hub, idx) => (
-              <ScrollReveal 
-                key={hub.city}
-                animation="fade-up"
-                delay={idx * 100}
-                duration={600}
-              >
-                <div className="group rounded-2xl sm:rounded-3xl bg-white dark:bg-slate-800/60 border border-slate-200 dark:border-white/10 overflow-hidden shadow-xs hover:shadow-lg hover:border-pink-500/30 transition-all duration-300">
-                  <div className="relative h-44 sm:h-48 w-full overflow-hidden">
-                    <img 
-                      src={hub.image} 
-                      alt={`${hub.city} office`}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                      loading="lazy"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
-                    <div className="absolute bottom-3 left-3 text-white">
-                      <span className="text-sm sm:text-base font-bold flex items-center gap-1.5">
-                        <MapPin className="w-4 h-4 text-pink-400" />
-                        {hub.city}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="p-4 pt-5 sm:pt-6">
-                    <span className="text-xs font-mono font-semibold text-pink-600 dark:text-pink-400 block mb-1">
-                      {hub.region}
-                    </span>
-                    <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-                      {hub.address}
-                    </p>
-                  </div>
-                </div>
-              </ScrollReveal>
-            ))}
-          </div>
-        </div>
-      </section>
+
+
 
       {/* =========================================================================
           INTERACTIVE RFQ & BIDDING DESK SECTION

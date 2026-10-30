@@ -405,7 +405,7 @@ export default function AboutPage() {
 
       <section
         id="our-philosophy"
-        className="relative scroll-mt-20 overflow-hidden bg-gradient-to-br from-white via-pink-50/70 to-purple-50/60 py-8 sm:py-10 lg:py-8 dark:from-slate-950 dark:via-purple-950/20 dark:to-slate-950"
+        className="relative scroll-mt-20 overflow-hidden bg-transparent py-8 sm:py-10 lg:py-8"
       >
         <div className="section-container relative z-10">
           <div className="grid grid-cols-1 items-center gap-6 lg:grid-cols-2">
