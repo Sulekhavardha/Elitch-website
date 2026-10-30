@@ -44,8 +44,7 @@ export default function ServicesMatrix() {
   const filteredServices = (activeFilter === 'All' 
     ? SERVICES 
     : SERVICES.filter(s => s.category.toLowerCase().includes(activeFilter.toLowerCase()) || activeFilter.toLowerCase().includes(s.category.toLowerCase())))
-    .slice()
-    .sort((a, b) => (a.id === 'performance-tracking' ? 1 : b.id === 'performance-tracking' ? -1 : 0));
+    .filter(s => s.id !== 'growth-strategy' && s.id !== 'performance-tracking');
 
   return (
     <div className="w-full">
@@ -176,7 +175,7 @@ export default function ServicesMatrix() {
           to="/services"
           className="group relative inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3.5 sm:py-4 rounded-xl text-xs sm:text-sm font-bold text-white bg-gradient-to-r from-pink-600 to-rose-600 hover:from-pink-700 hover:to-rose-700 shadow-lg shadow-pink-600/20 hover:shadow-xl transition-all font-display active:scale-95 overflow-hidden w-full sm:w-auto text-center"
         >
-          <span className="relative z-10">Explore All 10 Practice Blueprints &amp; Deliverables</span>
+          <span className="relative z-10">Explore All Practice Blueprints &amp; Deliverables</span>
           <ArrowUpRight className="w-4 h-4 relative z-10 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 duration-300 shrink-0" />
         </Link>
       </ScrollReveal>

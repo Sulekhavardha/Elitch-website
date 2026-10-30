@@ -17,15 +17,14 @@ export default function GetPanelBookPage() {
     e.preventDefault();
     setLoading(true);
 
-    setTimeout(() => {
-      try {
-        generatePanelBookPDF();
-      } catch (err) {
-        console.error('Error generating PDF:', err);
-      }
-      setLoading(false);
-      setSubmitted(true);
-    }, 600);
+    try {
+      generatePanelBookPDF();
+    } catch (err) {
+      console.error('Error generating PDF:', err);
+    }
+
+    setLoading(false);
+    setSubmitted(true);
   };
 
   return (

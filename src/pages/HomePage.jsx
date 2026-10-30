@@ -107,7 +107,7 @@ export default function HomePage() {
                 <ScrollReveal animation="fade-up" delay={300} duration={650}>
                   <div className="pt-2 flex flex-row items-center justify-start gap-3 sm:gap-4">
                     <a
-                      href="#rfq-section"
+                      href="/contact"
                       className="group inline-flex items-center justify-center gap-2.5 px-6 sm:px-8 py-3.5 sm:py-4 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-pink-600 to-rose-600 hover:from-pink-700 hover:to-rose-700 shadow-md sm:shadow-lg shadow-pink-600/20 hover:shadow-xl transition-all duration-300 transform active:scale-95 text-center"
                     >
                       <span>Let's Discuss Your Project</span>
@@ -138,7 +138,7 @@ export default function HomePage() {
                 {/* Mobile-only CTAs directly below the chart: Matching PanelPage gaps */}
                 <div className="mt-2.5 sm:mt-4 flex flex-col items-center justify-center gap-2 sm:gap-2.5 w-full lg:hidden">
                   <a
-                    href="#rfq-section"
+                    href="/contact"
                     className="w-full max-w-[280px] inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-pink-600 to-rose-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-pink-600/20 transition-all duration-300 hover:-translate-y-0.5 hover:from-pink-700 hover:to-rose-700 hover:shadow-xl active:scale-95 text-center"
                   >
                     <span>Let's Discuss Project</span>
@@ -321,10 +321,10 @@ export default function HomePage() {
 
                 <div className="pt-6 sm:pt-8 mt-6">
                   <a
-                    href="#rfq-section"
+                    href="/contact"
                     className="inline-flex items-center justify-center gap-2.5 px-6 sm:px-8 py-3.5 sm:py-4 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-pink-600 to-rose-600 hover:from-pink-700 hover:to-rose-700 shadow-md sm:shadow-lg shadow-pink-600/30 transition-all duration-300 transform active:scale-95 w-full sm:w-auto text-center"
                   >
-                    <span>Select our Clientship</span>
+                    <span>Contact Us</span>
                     <ArrowRight className="w-4 h-4" />
                   </a>
                 </div>
@@ -339,67 +339,7 @@ export default function HomePage() {
 
 
 
-      {/* =========================================================================
-          INTERACTIVE RFQ & BIDDING DESK SECTION
-         ========================================================================= */}
-      <section 
-        id="rfq-section" 
-        className="relative py-12 sm:py-16 lg:py-12 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white overflow-hidden border-t border-white/5"
-      >
-        {/* Legacy #contact anchor support */}
-        <div id="contact" className="absolute -top-20 opacity-0 pointer-events-none" />
-
-        {/* Ambient lighting */}
-        <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-96 h-96 bg-pink-500/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 right-10 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
-            
-            {/* Left Column: Bidding Desk SLA & Direct Contacts */}
-            <div className="lg:col-span-5 space-y-5 sm:space-y-6">
-              <ScrollReveal animation="fade-up" duration={600}>
-                <h2 className="text-2xl sm:text-3xl font-display font-extrabold tracking-tight text-slate-900 dark:text-white leading-tight">
-                  Commission Your Research Study.
-                </h2>
-              </ScrollReveal>
-
-              <ScrollReveal animation="fade-up" delay={100} duration={650}>
-                <p className="text-slate-600 dark:text-slate-300 text-sm sm:text-base leading-relaxed">
-                  Submit your sample specs, target incidence rate, and questionnaire length. Our bidding architects evaluate feasibility and provide comprehensive rate cards within two business hours.
-                </p>
-              </ScrollReveal>
-
-              <ScrollReveal animation="fade-up" delay={200} duration={650}>
-                <div className="p-4 rounded-2xl bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 text-xs text-slate-600 dark:text-slate-300 space-y-1 shadow-xs">
-                  <div className="font-semibold text-slate-900 dark:text-white">Global Operating Hubs:</div>
-                  <div className="text-slate-500 dark:text-slate-400">
-                    New York · London · Singapore · Bengaluru
-                  </div>
-                </div>
-              </ScrollReveal>
-            </div>
-
-            {/* Right Column: Embedded RfqForm */}
-            <div className="lg:col-span-7 w-full">
-              <ScrollReveal animation="fade-up" delay={200} duration={700}>
-                <div className="rounded-2xl sm:rounded-3xl bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 p-4 sm:p-8 backdrop-blur-xl shadow-xl">
-                  <div className="mb-6 pb-4 border-b border-slate-200 dark:border-white/10">
-                    <h3 className="text-lg sm:text-2xl font-display font-bold text-slate-900 dark:text-white">
-                      Request for Quotation (RFQ)
-                    </h3>
-                    <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
-                      Fill out your study parameters below for an immediate feasibility check.
-                    </p>
-                  </div>
-                  <RfqForm initialType="rfq" />
-                </div>
-              </ScrollReveal>
-            </div>
-
-          </div>
-        </div>
-      </section>
+      
 
       {/* =========================================================================
           INTERACTIVE VIDEO MODAL (TRIGGERED BY "WATCH VIDEO")

@@ -145,15 +145,18 @@ export default function Navbar() {
       {/* ── Main bar ── */}
       <div className="mx-auto max-w-7xl px-4 sm:px-6 flex items-center justify-between gap-4">
 
-        {/* Brand logo — circular ER emblem and ELICIT wordmark */}
+                {/* Brand logo */}
         <Link
           to="/"
           onClick={() => { closeMenu(); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
           aria-label="Elicit Research & Insights Inc. — Home"
-          className="flex min-w-0 items-center gap-2.5 sm:gap-3 rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-500"
+          className="flex min-w-0 items-center rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-500 py-1"
         >
-          <ElicitLogoMark className="h-10 w-10 sm:h-11 sm:w-11" />
-          <ElicitWordmark />
+          <img
+            src="/images/logo.png"
+            alt="Elicit Research & Insights Inc."
+            className="h-9 sm:h-11 md:h-12 w-auto max-w-[210px] sm:max-w-[250px] object-contain dark:invert dark:hue-rotate-180 transition-transform duration-200 hover:opacity-95"
+          />
         </Link>
 
         {/* Desktop nav */}

@@ -48,21 +48,12 @@ export default function Footer() {
 
           {/* Company bio */}
           <div className="lg:col-span-4 flex flex-col gap-6">
-            <Link to="/" className="flex items-center gap-3 w-fit">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-900 shadow-sm shrink-0">
-                <span className="font-display font-black text-xl leading-none">
-                  <span className="text-pink-600 dark:text-pink-400">e</span>
-                  <span className="text-slate-900 dark:text-white">r</span>
-                </span>
-              </div>
-              <div className="flex flex-col">
-                <span className="font-display font-extrabold text-[17px] tracking-tight text-slate-900 dark:text-white">
-                  ELICIT <span className="font-normal text-slate-500 dark:text-slate-400">RESEARCH</span>
-                </span>
-                <span className="text-[9px] tracking-[0.18em] uppercase font-medium text-slate-400 dark:text-slate-500">
-                  &amp; Insights Inc.
-                </span>
-              </div>
+            <Link to="/" className="flex items-center w-fit py-1">
+              <img
+                src="/images/logo.png"
+                alt="Elicit Research & Insights Inc."
+                className="h-9 sm:h-11 w-auto max-w-[220px] object-contain dark:invert dark:hue-rotate-180 transition-transform duration-200 hover:opacity-95"
+              />
             </Link>
 
             <p className="body-sm text-slate-500 dark:text-slate-400 leading-relaxed">

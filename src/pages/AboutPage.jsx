@@ -268,12 +268,8 @@ export default function AboutPage() {
 
       {/* HERO SECTION */}
 
-      <section
-        className="relative isolate flex min-h-[100vh] min-h-[100svh] w-full flex-col justify-start overflow-hidden border-b border-slate-200/80 dark:border-white/5"
-        style={{
-          paddingTop: "clamp(3rem, 4vh, 4rem)",
-          paddingBottom: "clamp(2rem, 4vh, 3rem)",
-        }}
+            <section
+        className="relative isolate flex w-full flex-col overflow-hidden border-b border-slate-200/80 dark:border-white/5 pt-4 pb-10 sm:pt-6 sm:pb-12 lg:pt-8 lg:pb-12"
       >
         {/* Background glows and gradient */}
         <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden opacity-0">
@@ -327,9 +323,11 @@ export default function AboutPage() {
             </div>
 
             {/* Main heading — dark navy + pink-purple gradient */}
-            <h1 className="max-w-3xl text-3xl font-extrabold leading-[1.2] tracking-tight text-slate-900 sm:text-4xl lg:text-5xl dark:text-white">
-              Data Precision Meets
-              <span className="mt-2 block bg-gradient-to-r from-pink-500 via-purple-500 to-rose-500 bg-clip-text text-transparent">
+            <h1 className="max-w-3xl text-3xl font-extrabold leading-[1.25] sm:leading-[1.22] tracking-tight text-slate-900 sm:text-4xl lg:text-5xl dark:text-white overflow-visible">
+              <span className="block py-1 pb-1.5">
+                Data Precision Meets
+              </span>
+              <span className="mt-0.5 block bg-gradient-to-r from-pink-500 via-purple-500 to-rose-500 bg-clip-text text-transparent leading-tight py-1 pb-2.5">
                 Global Intelligence.
               </span>
             </h1>
@@ -747,7 +745,7 @@ export default function AboutPage() {
         <div className="pointer-events-none absolute -left-20 top-24 h-72 w-72 rounded-full bg-pink-300/20 blur-[100px] dark:bg-pink-500/10" />
 
         <div className="section-container relative z-10">
-          <div className="mb-10 grid grid-cols-1 items-center gap-8 lg:grid-cols-2 lg:gap-14">
+          <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-2 lg:gap-14">
             <div className="img-zoom-container relative overflow-hidden rounded-2xl border border-white/80 shadow-xl shadow-purple-900/10 dark:border-white/10 dark:shadow-black/20">
               <img
                 src={HERO_IMAGES.globalNetwork.url}
@@ -805,57 +803,6 @@ export default function AboutPage() {
                 </div>
               </div>
             </div>
-          </div>
-
-          {/* Office Cards */}
-
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-            {headquarters.map(([key, hub]) => (
-              <article
-                key={key}
-                className="card-base card-hover hover-lift group flex flex-col overflow-hidden rounded-xl"
-              >
-                {hub.image && (
-                  <div className="img-zoom-container relative h-36 overflow-hidden">
-                    <img
-                      src={hub.image.url}
-                      alt={hub.image.alt}
-                      className="h-full w-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
-                      loading="lazy"
-                    />
-
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/75 via-transparent to-transparent" />
-
-                    <div className="absolute bottom-3 left-3 flex items-center gap-1.5 text-xs font-semibold text-white">
-                      <MapPin
-                        size={14}
-                        className="shrink-0 text-pink-300"
-                      />
-                      {hub.city}
-                    </div>
-                  </div>
-                )}
-
-                <div className="flex flex-grow flex-col p-4">
-                  <h3 className="mb-2 text-sm font-semibold text-slate-900 transition-colors group-hover:text-pink-700 sm:text-base dark:text-white dark:group-hover:text-pink-400">
-                    {hub.city} Office
-                  </h3>
-
-                  <p className="text-xs leading-5 text-slate-500 sm:text-sm dark:text-slate-400">
-                    {hub.address}
-                  </p>
-
-                  <p className="mt-1 text-[10px] text-slate-400 sm:text-xs dark:text-slate-500">
-                    {hub.region}
-                  </p>
-
-                  <div className="mt-auto flex items-center gap-2 border-t border-slate-100 pt-3 text-[11px] font-medium text-emerald-600 dark:border-white/[0.06] dark:text-emerald-400">
-                    <span className="h-1.5 w-1.5 animate-status-pulse rounded-full bg-emerald-500" />
-                    Hub Active
-                  </div>
-                </div>
-              </article>
-            ))}
           </div>
         </div>
       </section>

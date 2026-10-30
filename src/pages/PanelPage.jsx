@@ -78,15 +78,14 @@ export default function PanelPage() {
     e.preventDefault();
     setModalLoading(true);
 
-    setTimeout(() => {
-      try {
-        generatePanelBookPDF();
-      } catch (err) {
-        console.error('Error generating PDF:', err);
-      }
-      setModalLoading(false);
-      setModalSubmitted(true);
-    }, 600);
+    try {
+      generatePanelBookPDF();
+    } catch (err) {
+      console.error('Error generating PDF:', err);
+    }
+
+    setModalLoading(false);
+    setModalSubmitted(true);
   };
 
   return (
@@ -152,15 +151,17 @@ export default function PanelPage() {
             </div>
 
             {/* Heading */}
-            <h1 className="max-w-3xl text-3xl font-extrabold leading-[1.2] tracking-tight text-slate-900 sm:text-4xl lg:text-5xl dark:text-white">
-              A Global Community.
-              <span className="mt-2 block bg-gradient-to-r from-pink-500 via-purple-500 to-rose-500 bg-clip-text text-transparent">
+            <h1 className="max-w-3xl text-2xl sm:text-3xl md:text-4xl lg:text-[2.65rem] font-display font-extrabold leading-[1.22] tracking-tight text-slate-900 dark:text-white overflow-visible">
+              <span className="block py-1 pb-2">
+                A Global Community.
+              </span>
+              <span className="mt-0.5 block bg-gradient-to-r from-pink-500 via-purple-500 to-rose-500 bg-clip-text text-transparent leading-tight py-1 pb-2">
                 Real Human Insights.
               </span>
             </h1>
 
             {/* Description */}
-            <p className="mt-4 max-w-2xl text-base leading-relaxed text-slate-600 sm:mt-5 sm:text-lg dark:text-slate-300">
+            <p className="mt-3 sm:mt-4 max-w-2xl text-sm sm:text-base leading-relaxed text-slate-600 dark:text-slate-300">
               Discover our global panel community connecting diverse audiences
               with research that helps businesses understand people and make
               informed decisions.
