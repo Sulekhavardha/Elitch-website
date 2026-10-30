@@ -17,7 +17,7 @@ import {
   ArrowUpRight,
   Layers,
 } from 'lucide-react';
-import { HERO_IMAGES } from '../data/imageAssets';
+
 
 export default function ServicesPage() {
   const location = useLocation();

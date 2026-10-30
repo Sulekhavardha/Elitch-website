@@ -45,7 +45,7 @@ import RfqForm from '../components/contact/RfqForm';
 import ScrollReveal from '../components/common/ScrollReveal';
 import CountUp from '../components/common/CountUp';
 import { COMPANY, FAQ_DATA } from '../data/companyData';
-import { HUB_CITY_IMAGES } from '../data/imageAssets';
+
 
 // Curated high-resolution Unsplash assets for full-length showcase
 const growthImage = "/pages/home/image1.webp";

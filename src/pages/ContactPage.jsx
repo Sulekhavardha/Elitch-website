@@ -5,7 +5,7 @@ import { Mail, MapPin, Clock, ArrowUpRight } from 'lucide-react';
 
 import RfqForm from '../components/contact/RfqForm';
 import { COMPANY } from '../data/companyData';
-import { HERO_IMAGES } from '../data/imageAssets';
+
 
 export default function ContactPage() {
   const [searchParams] = useSearchParams();

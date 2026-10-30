@@ -1,4 +1,4 @@
-import { SERVICE_IMAGES, HUB_CITY_IMAGES, ABOUT_IMAGES } from './imageAssets';
+import { SERVICE_IMAGES, ABOUT_IMAGES } from './imageAssets';
 
 export const COMPANY = {
   name: "Elicit Research & Insights Inc.",
@@ -18,26 +18,22 @@ export const COMPANY = {
     us: {
       city: "New York",
       address: "One World Trade Center, Suite 8500",
-      region: "New York, NY 10007, USA",
-      image: HUB_CITY_IMAGES.us
+      region: "New York, NY 10007, USA"
     },
     uk: {
       city: "London",
       address: "30 St Mary Axe, City of London",
-      region: "London EC3A 8EP, United Kingdom",
-      image: HUB_CITY_IMAGES.uk
+      region: "London EC3A 8EP, United Kingdom"
     },
     asia: {
       city: "Singapore",
       address: "Marina Bay Financial Centre, Tower 1",
-      region: "Singapore 018981",
-      image: HUB_CITY_IMAGES.asia
+      region: "Singapore 018981"
     },
     india: {
       city: "Bengaluru",
       address: "Prestige Tech Park, Outer Ring Road",
-      region: "Bengaluru, KA 560103, India",
-      image: HUB_CITY_IMAGES.india
+      region: "Bengaluru, KA 560103, India"
     }
   },
   stats: [

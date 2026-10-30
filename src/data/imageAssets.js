@@ -1,60 +1,14 @@
 /**
- * Curated, verified, high-resolution Unsplash image assets for Elicit Research.
- * All image URLs are optimized with WebP/auto formatting, responsive cropping, and CDN delivery.
- * Each asset matches the corporate market research, consulting, and analytics theme.
+ * Curated, verified, high-resolution image assets for Elicit Research.
+ * All image URLs are optimized with WebP/auto formatting and responsive cropping.
  */
 
 export const HERO_IMAGES = {
-  // Main Hero background telemetry texture & analytics
-  telemetryBackdrop: {
-    url: "/images/Home/1f46bdee-5823-4b76-8d10-8abb3f175011.webp",
-    alt: "Elicit Research real-time predictive analytics and market intelligence dashboards",
-    credit: "Unsplash / Luke Chesser"
-  },
-  // Full-bleed Intelligence at Scale banner
-  intelligenceBanner: {
-    url: "/images/Home/media-generation-elicit-services-hero-laptop-da-0-8e9535ce-e1b3-451e-bea4-5f2426d8c916.webp",
-    alt: "Enterprise market research analytics and quantitative charts on display",
-    credit: "Unsplash / Carlos Muza"
-  },
-  // Corporate architectural glass command center
-  corporateGlass: {
-    url: "/images/Home/Gemini_Generated_Image_qi37yoqi37yoqi37.webp",
-    alt: "Global corporate headquarters reflecting enterprise data scale and precision",
-    credit: "Unsplash / Sean Pollock"
-  },
-  // Global digital network & connectivity
+  // Global digital network & connectivity (used in GlobalReachVisual, AboutPage, NotFoundPage)
   globalNetwork: {
     url: "/images/Home/media-generation-elicit-panel-more-different-0-d8a9513d-7713-40fa-bd1a-136e3097f756.webp",
     alt: "Global data network connectivity across 45+ international market jurisdictions",
     credit: "Unsplash / NASA"
-  },
-  // Modern executive consultation workspace
-  executiveConsulting: {
-    url: "/images/Home/Gemini_Generated_Image_t5lntkt5lntkt5ln.webp",
-    alt: "Modern executive research consultation and project bidding office",
-    credit: "Unsplash / Mario Gogh"
-  }
-};
-
-export const ADVANTAGE_IMAGES = {
-  // Proprietary Double Opt-In Panel: Global diverse verified participants
-  doubleOptIn: {
-    url: "/images/Home/photo-1521737711867-e3b97375f902 (1).webp",
-    alt: "Diverse group of verified global panelists and research participants",
-    credit: "Unsplash / Annie Spratt"
-  },
-  // Complex Logic Scripting: Advanced survey programming & code engineering
-  complexLogic: {
-    url: "/images/Home/Gemini_Generated_Image_1159ob1159ob1159.webp",
-    alt: "Lead programmer architecting complex logic scripts and conjoint survey modules",
-    credit: "Unsplash / Fatos Bytyqi"
-  },
-  // Triple-Layer Fraud Scrubbing: Security, data verification & honeypots
-  fraudScrubbing: {
-    url: "/images/Home/photo-1563986768609-322da13575f3.webp",
-    alt: "Triple-layer cybersecurity shield and biometric fraud filtration system",
-    credit: "Unsplash / FLY:D"
   }
 };
 
@@ -131,81 +85,6 @@ export const ABOUT_IMAGES = {
     url: "/images/Home/media-generation-elicit-technology-data-securit-0-d4ff9ab4-3342-4513-8fca-9b8d66d869ba.webp",
     alt: "Technology and Data Security Committee managing SOC-2 and GDPR infrastructure",
     credit: "Unsplash / Markus Spiske"
-  }
-};
-
-export const HUB_CITY_IMAGES = {
-  us: {
-    url: "/images/Home/new-york.webp",
-    alt: "New York City One World Trade Center - North American headquarters",
-    credit: "Unsplash / Oliver Niblett"
-  },
-  uk: {
-    url: "/images/Home/london.webp",
-    alt: "London financial district and City of London - EMEA headquarters",
-    credit: "Unsplash / Benjamin Davies"
-  },
-  asia: {
-    url: "/images/Home/singapore.webp",
-    alt: "Singapore Marina Bay Financial Centre - Asia-Pacific headquarters",
-    credit: "Unsplash / Swapnil Bapat"
-  },
-  india: {
-    url: "/images/Home/banglore-office.webp",
-    alt: "Bengaluru Technology Corridor - India engineering and sampling center",
-    credit: "Unsplash / Naveen Saxena"
-  }
-};
-
-export const PANEL_AUDIENCE_IMAGES = {
-  hero: {
-    url: "/images/Home/photo-1522202176988-66273c2fd55f (1).webp",
-    alt: "Verified global panelists participating in real-time quantitative and qualitative surveys",
-    credit: "Unsplash / Brooke Cagle"
-  },
-  b2b: {
-    csuite: {
-      url: "/images/Home/Gemini_Generated_Image_6p9ol56p9ol56p9o.webp",
-      alt: "C-suite enterprise executive and business founder panelist",
-      credit: "Unsplash / Ali Morshedlou"
-    },
-    it: {
-      url: "/images/Home/Gemini_Generated_Image_wzvq8ewzvq8ewzvq.webp",
-      alt: "Enterprise IT director, software architect, and cloud engineering panelist",
-      credit: "Unsplash / Slidebean"
-    },
-    procurement: {
-      url: "/images/Home/Gemini_Generated_Image_55zkg455zkg455zk.webp",
-      alt: "Global supply chain and vendor procurement decision-maker panelist",
-      credit: "Unsplash / Petre Barlea"
-    },
-    healthcare: {
-      url: "/images/Home/Gemini_Generated_Image_u0shdeu0shdeu0sh.webp",
-      alt: "Licensed physician, hospital administrator, and healthcare clinical researcher",
-      credit: "Unsplash / National Cancer Institute"
-    }
-  },
-  b2c: {
-    genz: {
-      url: "/images/Home/photo-1523240795612-9a054b0db644.webp",
-      alt: "Gen Z digital native consumer actively engaging via smartphone",
-      credit: "Unsplash / Priscilla Du Preez"
-    },
-    millennial: {
-      url: "/images/Home/Gemini_Generated_Image_bts05dbts05dbts0.webp",
-      alt: "Millennial household purchasing decision-maker and tech professional",
-      credit: "Unsplash / Christina @ wocintechchat.com"
-    },
-    affluent: {
-      url: "/images/Home/Gemini_Generated_Image_t3zjkmt3zjkmt3zj.webp",
-      alt: "Affluent high-net-worth investor and luxury consumer panelist",
-      credit: "Unsplash / Joseph Gonzalez"
-    },
-    silver: {
-      url: "/images/Home/Gemini_Generated_Image_grrzepgrrzepgrrz.png",
-      alt: "Active senior tech adopter and healthcare decision-maker (55+ demographic)",
-      credit: "Unsplash / Centre for Ageing Better"
-    }
   }
 };
 

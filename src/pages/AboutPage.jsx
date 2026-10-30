@@ -370,7 +370,7 @@ export default function AboutPage() {
             <div className="relative h-[260px] overflow-hidden rounded-3xl border border-white/60 bg-slate-200 shadow-2xl shadow-purple-900/15 sm:h-[360px] lg:h-[430px] dark:border-white/10">
               <img
                 src="/images/Home/media-generation-elicit-trust-other-image-white-0-ee14d1b0-a60a-4dd2-975d-ce17461a7287.webp"
-                alt={HERO_IMAGES.corporateGlass.alt}
+                alt="Global corporate headquarters reflecting enterprise data scale and precision"
                 className="h-full w-full object-cover object-center"
                 loading="eager"
                 fetchPriority="high"

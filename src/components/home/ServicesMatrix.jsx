@@ -18,7 +18,7 @@ import {
 import { Link } from 'react-router-dom';
 import Card3D from '../common/Card3D';
 import ScrollReveal from '../common/ScrollReveal';
-import { HERO_IMAGES } from '../../data/imageAssets';
+
 
 export default function ServicesMatrix() {
   const [activeFilter, setActiveFilter] = useState('All');
