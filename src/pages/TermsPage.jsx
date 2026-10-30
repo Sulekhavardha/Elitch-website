@@ -260,13 +260,14 @@ export default function TermsPage() {
           <div className="flex items-center gap-3 shrink-0">
             <a
               href={`mailto:${COMPANY.emails.general}`}
-              className="px-5 py-2.5 rounded-full bg-slate-900 hover:bg-pink-600 text-white dark:bg-white dark:text-slate-900 dark:hover:bg-pink-500 dark:hover:text-white font-semibold text-xs sm:text-sm shadow-md transition-all active:scale-95"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-slate-300 dark:border-white/15 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 hover:border-pink-500 hover:text-pink-600 dark:hover:text-pink-400 font-semibold text-xs sm:text-sm shadow-sm hover:shadow transition-all active:scale-95"
             >
-              {COMPANY.emails.general}
+              <Mail className="w-4 h-4 text-pink-600 dark:text-pink-400 shrink-0" />
+              <span>{COMPANY.emails.general}</span>
             </a>
             <Link
               to="/contact?type=quote"
-              className="px-5 py-2.5 rounded-full bg-slate-100 hover:bg-slate-200 dark:bg-white/10 dark:hover:bg-white/15 text-slate-700 dark:text-slate-200 font-semibold text-xs sm:text-sm transition-all"
+              className="inline-flex items-center justify-center px-6 py-2.5 rounded-full bg-gradient-to-r from-pink-600 via-rose-600 to-purple-600 hover:from-pink-500 hover:to-rose-500 text-white font-semibold text-xs sm:text-sm shadow-md shadow-pink-500/25 hover:shadow-lg hover:shadow-pink-500/35 transition-all active:scale-95"
             >
               Contact RFQ Desk
             </Link>
