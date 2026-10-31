@@ -38,17 +38,17 @@ import {
 
 import GlobalReachVisual from '../components/home/GlobalReachVisual';
 import ServicesMatrix from '../components/home/ServicesMatrix';
-import MethodologyFlow from '../components/home/MethodologyFlow';
+
 import Hero3DScene from '../components/home/Hero3DScene';
 import GrowthAnalyticsChart from '../components/home/GrowthAnalyticsChart';
-import RfqForm from '../components/contact/RfqForm';
+
 import ScrollReveal from '../components/common/ScrollReveal';
 import CountUp from '../components/common/CountUp';
 import { COMPANY, FAQ_DATA } from '../data/companyData';
 
 
 // Curated high-resolution Unsplash assets for full-length showcase
-const growthImage = "/pages/home/image1.webp";
+
 
 export default function HomePage() {
   const [videoOpen, setVideoOpen] = useState(false);
