@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { generatePanelBookPDF } from "../utils/pdfGenerator";
 import AnimatedCounter from "../components/common/AnimatedCounter";
+import PdfDownloadModal from "../components/common/PdfDownloadModal";
 
 const regions = [
   { label: "North America", x: 115, y: 92, color: "#ec4899" },
@@ -65,28 +66,7 @@ export default function PanelPage() {
       }
     }
   }, [location.hash, location.pathname]);
-  const [modalForm, setModalForm] = useState({
-    name: '',
-    jobTitle: '',
-    companyName: '',
-    email: '',
-  });
-  const [modalSubmitted, setModalSubmitted] = useState(false);
-  const [modalLoading, setModalLoading] = useState(false);
 
-  const handleModalSubmit = (e) => {
-    e.preventDefault();
-    setModalLoading(true);
-
-    try {
-      generatePanelBookPDF();
-    } catch (err) {
-      console.error('Error generating PDF:', err);
-    }
-
-    setModalLoading(false);
-    setModalSubmitted(true);
-  };
 
   return (
     <main className="relative w-full min-w-0 overflow-x-clip bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-100">
@@ -455,10 +435,7 @@ export default function PanelPage() {
           <div className="pt-6 sm:pt-8 mt-6">
             <button
               type="button"
-              onClick={() => {
-                setModalSubmitted(false);
-                setPanelBookModalOpen(true);
-              }}
+              onClick={() => setPanelBookModalOpen(true)}
               className="text-base sm:text-lg font-semibold !text-white hover:underline inline-flex items-center gap-1.5 focus:outline-none transition-all group"
             >
               <span>Download</span>
@@ -489,138 +466,12 @@ export default function PanelPage() {
       </section>
 
       {/* =========================================================================
-          GET PANEL BOOK MODAL (MATCHING IMAGE 2)
+          PREMIUM AUTOMATIC LEAD CAPTURE & PDF DOWNLOAD MODAL
          ========================================================================= */}
-      {panelBookModalOpen && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm p-4 animate-in fade-in duration-200"
-          onClick={() => setPanelBookModalOpen(false)}
-        >
-          <div
-            className="relative w-full max-w-3xl bg-white dark:bg-slate-900 rounded-3xl shadow-2xl overflow-hidden border border-slate-200 dark:border-white/10 p-6 sm:p-10"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Close button */}
-            <button
-              onClick={() => setPanelBookModalOpen(false)}
-              className="absolute top-5 right-5 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 dark:bg-white/10 dark:hover:bg-white/20 flex items-center justify-center text-slate-600 dark:text-slate-300 transition-colors"
-            >
-              <X className="w-4 h-4" />
-            </button>
-
-            {/* Header */}
-            <div className="text-center mb-8">
-              <h2 className="text-2xl sm:text-4xl font-display font-extrabold text-[#d91b5c]">
-                Get Panel Book
-              </h2>
-              <div className="mt-3 inline-flex items-center gap-2 rounded-full bg-slate-100 dark:bg-slate-800 px-4 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-white/10 shadow-xs">
-                <Link to="/" className="flex items-center gap-1 hover:text-[#d91b5c]">
-                  <Home className="w-3.5 h-3.5" />
-                  <span>Home</span>
-                </Link>
-                <span className="text-slate-400">/</span>
-                <span className="text-[#d91b5c]">Get Panel Book</span>
-              </div>
-            </div>
-
-            {modalSubmitted ? (
-              <div className="text-center py-6 space-y-4">
-                <div className="w-14 h-14 rounded-full bg-emerald-100 text-emerald-600 mx-auto flex items-center justify-center">
-                  <CheckCircle2 className="w-7 h-7" />
-                </div>
-                <h3 className="text-xl font-display font-bold text-slate-900 dark:text-white">
-                  Thank You, {modalForm.name || 'Partner'}!
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-md mx-auto">
-                  Your official <strong>Elicit Research Global Panel Book</strong> has been generated and downloaded.
-                </p>
-                <div className="pt-2 flex justify-center gap-3">
-                  <button
-                    type="button"
-                    onClick={() => generatePanelBookPDF()}
-                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#d91b5c] hover:bg-[#c21850] text-white font-semibold text-xs transition-all shadow-sm"
-                  >
-                    <Download className="w-3.5 h-3.5" />
-                    <span>Download Again</span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setPanelBookModalOpen(false)}
-                    className="px-5 py-2.5 rounded-full bg-slate-100 dark:bg-white/10 text-slate-700 dark:text-slate-200 font-semibold text-xs transition-all"
-                  >
-                    Close
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <form onSubmit={handleModalSubmit} className="space-y-5">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
-                  <div>
-                    <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1.5">
-                      Your Name <span className="text-[#d91b5c]">(required)</span>
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      value={modalForm.name}
-                      onChange={(e) => setModalForm({ ...modalForm, name: e.target.value })}
-                      className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-white/10 rounded-full px-4 py-2.5 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-[#d91b5c]"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1.5">
-                      Job Title
-                    </label>
-                    <input
-                      type="text"
-                      value={modalForm.jobTitle}
-                      onChange={(e) => setModalForm({ ...modalForm, jobTitle: e.target.value })}
-                      className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-white/10 rounded-full px-4 py-2.5 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-[#d91b5c]"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1.5">
-                      Company Name
-                    </label>
-                    <input
-                      type="text"
-                      value={modalForm.companyName}
-                      onChange={(e) => setModalForm({ ...modalForm, companyName: e.target.value })}
-                      className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-white/10 rounded-full px-4 py-2.5 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-[#d91b5c]"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1.5">
-                      Your Official Email <span className="text-[#d91b5c]">(required)</span>
-                    </label>
-                    <input
-                      type="email"
-                      required
-                      value={modalForm.email}
-                      onChange={(e) => setModalForm({ ...modalForm, email: e.target.value })}
-                      className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-white/10 rounded-full px-4 py-2.5 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-[#d91b5c]"
-                    />
-                  </div>
-                </div>
-
-                <div className="pt-2">
-                  <button
-                    type="submit"
-                    disabled={modalLoading}
-                    className="px-8 py-2.5 rounded-full bg-[#d91b5c] hover:bg-[#c21850] active:scale-95 text-white font-semibold text-sm transition-all shadow-md shadow-pink-600/20 disabled:opacity-50 inline-flex items-center gap-2"
-                  >
-                    {modalLoading && <Loader2 className="w-4 h-4 animate-spin" />}
-                    <span>Submit</span>
-                  </button>
-                </div>
-              </form>
-            )}
-          </div>
-        </div>
-      )}
+      <PdfDownloadModal
+        isOpen={panelBookModalOpen}
+        onClose={() => setPanelBookModalOpen(false)}
+      />
     </main>
   );
 }

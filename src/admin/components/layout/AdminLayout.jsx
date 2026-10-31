@@ -26,6 +26,7 @@ import {
 } from 'lucide-react';
 import { useAdminAuth } from '../../context/AdminAuthContext';
 import api from '../../services/api';
+import ThemeToggle from '../../../components/common/ThemeToggle';
 
 export default function AdminLayout() {
   const { admin, logout } = useAdminAuth();
@@ -119,6 +120,12 @@ export default function AdminLayout() {
       path: '/admin/leads',
       icon: Inbox,
       badge: newLeadsCount > 0 ? newLeadsCount : null
+    },
+    {
+      name: 'PDF Download Leads',
+      path: '/admin/pdf-leads',
+      icon: FileText,
+      badge: null
     }
   ];
 
@@ -140,6 +147,7 @@ export default function AdminLayout() {
     if (p === '/admin/projects/new') return 'New Research Project';
     if (p.includes('/edit')) return 'Edit Research Project';
     if (p === '/admin/leads') return 'Leads & CRM Inquiries';
+    if (p === '/admin/pdf-leads') return 'PDF Download Leads';
     if (p === '/admin/contact-messages') return 'Contact Messages';
     if (p === '/admin/notifications') return 'Email Notifications & Resend';
     if (p === '/admin/gallery') return 'Visual Gallery Assets';
@@ -151,7 +159,7 @@ export default function AdminLayout() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF7FD] text-[#241B35] flex overflow-x-hidden font-sans">
+    <div className="min-h-screen bg-[#FAF7FD] dark:bg-slate-950 text-[#241B35] dark:text-slate-100 transition-colors duration-200 flex overflow-x-hidden font-sans">
       {/* Mobile Sidebar Overlay */}
       {isSidebarOpen && (
         <div
@@ -162,15 +170,15 @@ export default function AdminLayout() {
 
       {/* Sidebar - Royal Purple Gradient with Vibrant Pink Highlights */}
       <aside
-        className={`fixed top-0 bottom-0 left-0 z-50 flex flex-col bg-gradient-to-b from-[#21093A] via-[#1A072E] to-[#120321] border-r border-[#3D1463] shadow-[4px_0_24px_rgba(33,9,58,0.35)] transition-all duration-300 ${
+        className={`fixed top-0 bottom-0 left-0 z-50 flex flex-col bg-gradient-to-b from-[#6D0E3B] via-[#4E0827] to-[#2D0416] border-r border-pink-500/25 shadow-[4px_0_24px_rgba(216,27,96,0.25)] transition-all duration-300 ${
           isSidebarOpen ? 'translate-x-0 w-64' : '-translate-x-full lg:translate-x-0'
         } ${isCollapsed ? 'lg:w-20' : 'lg:w-64'}`}
       >
         {/* Brand Header */}
-        <div className="h-20 px-5 flex items-center justify-between border-b border-[#3D1463] bg-[#17052A]">
+        <div className="h-20 px-5 flex items-center justify-between border-b border-pink-500/20 bg-[#590B30]">
           <NavLink to="/admin" className="flex items-center space-x-3 group">
             {/* Vardha Monogram with Vibrant Pink & Purple Gradient */}
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#EC4899] via-[#D946EF] to-[#8B5CF6] border border-pink-400/40 flex items-center justify-center shadow-md shadow-[#EC4899]/30 group-hover:scale-105 transition-transform">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#EC4899] via-[#D81B60] to-[#BE185D] border border-pink-300/40 flex items-center justify-center shadow-md shadow-pink-500/30 group-hover:scale-105 transition-transform">
               <span className="font-sans font-black text-sm text-white tracking-wider drop-shadow-xs">
                 ER
               </span>
@@ -180,7 +188,7 @@ export default function AdminLayout() {
                 <span className="text-sm font-bold tracking-wider uppercase text-white font-display">
                   Elicit Research
                 </span>
-                <span className="text-[9px] tracking-widest uppercase font-bold text-[#F472B6] font-mono">
+                <span className="text-[9px] tracking-widest uppercase font-bold text-pink-300 font-mono">
                   & Insights Inc.
                 </span>
               </div>
@@ -189,7 +197,7 @@ export default function AdminLayout() {
 
           <button
             onClick={() => setIsSidebarOpen(false)}
-            className="lg:hidden p-1.5 rounded-xl text-[#C4B5FD] hover:text-[#F472B6] hover:bg-white/[0.08]"
+            className="lg:hidden p-1.5 rounded-xl text-pink-200 hover:text-white hover:bg-white/[0.08]"
           >
             <X className="w-5 h-5" />
           </button>
@@ -198,7 +206,7 @@ export default function AdminLayout() {
         {/* Navigation Links */}
         <div className="flex-1 px-3 py-5 space-y-1 overflow-y-auto vardha-admin-scrollbar">
           {!isCollapsed && (
-            <div className="px-3 pb-2 text-[10px] font-bold uppercase tracking-widest text-[#A78BFA]/80">
+            <div className="px-3 pb-2 text-[10px] font-bold uppercase tracking-widest text-pink-300/90">
               Research Platform Management
             </div>
           )}
@@ -215,17 +223,17 @@ export default function AdminLayout() {
                 to={item.path}
                 className={`relative flex items-center px-3.5 py-2.5 rounded-xl text-xs font-medium transition-all group ${
                   isActive
-                    ? 'bg-gradient-to-r from-[#A855F7]/25 to-[#EC4899]/20 text-white font-bold border border-[#EC4899]/40 shadow-xs'
-                    : 'text-[#C4B5FD] hover:text-white hover:bg-white/[0.06]'
+                    ? 'bg-gradient-to-r from-pink-500 to-rose-600 text-white font-bold border border-pink-300/40 shadow-sm shadow-pink-600/30'
+                    : 'text-pink-100/80 hover:text-white hover:bg-white/[0.10]'
                 }`}
                 title={isCollapsed ? item.name : undefined}
               >
                 {isActive && (
-                  <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 rounded-r-full bg-gradient-to-b from-[#EC4899] to-[#A855F7]"></span>
+                  <span className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 rounded-r-full bg-white shadow-xs"></span>
                 )}
                 <Icon
                   className={`w-4 h-4 flex-shrink-0 transition-colors ${
-                    isActive ? 'text-[#F472B6]' : 'text-[#A78BFA] group-hover:text-[#F472B6]'
+                    isActive ? 'text-white' : 'text-pink-300 group-hover:text-white'
                   } ${!isCollapsed ? 'mr-3' : 'mx-auto'}`}
                 />
 
@@ -234,7 +242,7 @@ export default function AdminLayout() {
                 )}
 
                 {!isCollapsed && item.badge && (
-                  <span className="ml-auto px-2 py-0.5 text-[10px] font-bold rounded-full bg-gradient-to-r from-[#EC4899] to-[#8B5CF6] text-white shadow-xs">
+                  <span className="ml-auto px-2 py-0.5 text-[10px] font-bold rounded-full bg-white text-pink-700 shadow-xs">
                     {item.badge}
                   </span>
                 )}
@@ -244,14 +252,14 @@ export default function AdminLayout() {
         </div>
 
         {/* Sidebar Footer */}
-        <div className="p-3 border-t border-[#3D1463] space-y-1.5 bg-[#140324]">
+        <div className="p-3 border-t border-pink-500/20 space-y-1.5 bg-[#250313]">
           <a
             href="/"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center px-3.5 py-2 rounded-xl text-xs font-semibold text-[#C4B5FD] hover:text-[#F472B6] hover:bg-white/[0.06] transition-all group"
+            className="flex items-center px-3.5 py-2 rounded-xl text-xs font-semibold text-pink-200/90 hover:text-white hover:bg-white/[0.08] transition-all group"
           >
-            <ExternalLink className="w-4 h-4 mr-3 flex-shrink-0 text-[#A78BFA] group-hover:text-[#F472B6] transition-colors" />
+            <ExternalLink className="w-4 h-4 mr-3 flex-shrink-0 text-pink-300 group-hover:text-white transition-colors" />
             {!isCollapsed && <span>View Public Portal</span>}
           </a>
 
@@ -272,11 +280,11 @@ export default function AdminLayout() {
         }`}
       >
         {/* Top Navigation Bar - Clean Purple & Pink Accented Header */}
-        <header className="h-20 sticky top-0 z-30 px-4 sm:px-8 flex items-center justify-between bg-white/95 backdrop-blur-md border-b border-[#EDE5F5] shadow-[0_2px_12px_rgba(109,40,217,0.03)]">
+        <header className="h-20 sticky top-0 z-30 px-4 sm:px-8 flex items-center justify-between bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-[#EDE5F5] dark:border-white/10 transition-colors duration-200 shadow-[0_2px_12px_rgba(109,40,217,0.03)]">
           <div className="flex items-center space-x-4">
             <button
               onClick={() => setIsSidebarOpen(true)}
-              className="lg:hidden p-2 rounded-xl text-[#786D88] hover:text-[#241B35] hover:bg-[#F3EEFF] transition-colors"
+              className="lg:hidden p-2 rounded-xl text-[#786D88] dark:text-slate-400 hover:text-[#241B35] dark:hover:text-white hover:bg-[#F3EEFF] dark:hover:bg-white/10 transition-colors"
               aria-label="Open sidebar"
             >
               <Menu className="w-5 h-5" />
@@ -297,7 +305,7 @@ export default function AdminLayout() {
                 <ChevronRight className="w-3 h-3 text-[#EC4899]" />
                 <span className="text-[#6D28D9] font-semibold">{getPageTitle()}</span>
               </div>
-              <h1 className="text-base sm:text-lg font-bold text-[#241B35] tracking-tight font-display mt-0.5">
+              <h1 className="text-base sm:text-lg font-bold text-[#241B35] dark:text-white tracking-tight font-display mt-0.5">
                 {getPageTitle()}
               </h1>
             </div>
@@ -314,13 +322,16 @@ export default function AdminLayout() {
               placeholder="Search projects by keyword..."
               value={globalSearch}
               onChange={(e) => setGlobalSearch(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 text-xs rounded-xl border border-[#EDE5F5] bg-[#FAF8FD] text-[#241B35] placeholder-[#9B91A8] focus:outline-none focus:ring-2 focus:ring-[#6D28D9]/15 focus:border-[#6D28D9] transition-all"
+              className="w-full pl-10 pr-4 py-2 text-xs rounded-xl border border-[#EDE5F5] dark:border-white/10 bg-[#FAF8FD] dark:bg-slate-800 text-[#241B35] dark:text-white placeholder-[#9B91A8] dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#6D28D9]/15 focus:border-[#6D28D9] transition-all"
             />
           </form>
 
           {/* Right Header Utilities */}
           <div className="flex items-center space-x-3 sm:space-x-4">
 
+
+            {/* Dark/Light Mode Theme Toggle Button */}
+            <ThemeToggle className="scale-90" />
 
             {/* Notification Dropdown */}
             <div className="relative">

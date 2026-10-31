@@ -37,6 +37,7 @@ import DashboardOverviewPage from './admin/pages/DashboardOverviewPage';
 import ProjectsListPage from './admin/pages/ProjectsListPage';
 import ProjectEditorPage from './admin/pages/ProjectEditorPage';
 import LeadsManagementPage from './admin/pages/LeadsManagementPage';
+import PdfLeadsPage from './admin/pages/PdfLeadsPage';
 import ContactMessagesPage from './admin/pages/ContactMessagesPage';
 import EmailNotificationsPage from './admin/pages/EmailNotificationsPage';
 import GalleryManagementPage from './admin/pages/GalleryManagementPage';
@@ -102,6 +103,7 @@ export default function App() {
               >
                 <Route index element={<Navigate to="/admin/leads" replace />} />
                 <Route path="leads" element={<LeadsManagementPage />} />
+                <Route path="pdf-leads" element={<PdfLeadsPage />} />
               </Route>
             </Routes>
           </ToastProvider>

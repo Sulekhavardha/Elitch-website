@@ -26,6 +26,7 @@ import floorPlanRoutes from './routes/floorPlanRoutes.js';
 import contentRoutes from './routes/contentRoutes.js';
 import uploadRoutes from './routes/uploadRoutes.js';
 import settingsRoutes from './routes/settingsRoutes.js';
+import pdfLeadRoutes from './routes/pdfLeadRoutes.js';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -107,6 +108,7 @@ app.use('/api/floor-plans', floorPlanRoutes);
 app.use('/api/content', contentRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/settings', settingsRoutes);
+app.use('/api/pdf-leads', pdfLeadRoutes);
 
 // Email notification status endpoint
 app.get('/api/admin/notifications/status', (req, res) => {
@@ -123,7 +125,7 @@ app.get('/api/admin/notifications/status', (req, res) => {
 app.get('/api/health', (req, res) => {
   res.status(200).json({
     status: 'online',
-    platform: 'Vardha Builders Architectural API',
+    platform: 'Elicit Research Platform API',
     version: '1.0.0',
     timestamp: new Date().toISOString()
   });

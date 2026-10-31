@@ -257,13 +257,15 @@ export default function TermsPage() {
             </div>
           </div>
 
-          <div className="flex items-center gap-3 shrink-0">
+          <div className="flex items-center gap-3 shrink-0 flex-wrap sm:flex-nowrap">
             <a
               href={`mailto:${COMPANY.emails.general}`}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-slate-300 dark:border-white/15 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 hover:border-pink-500 hover:text-pink-600 dark:hover:text-pink-400 font-semibold text-xs sm:text-sm shadow-sm hover:shadow transition-all active:scale-95"
+              className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full border-2 border-pink-500/40 hover:border-pink-500 bg-pink-50/80 hover:bg-pink-100/90 dark:bg-pink-950/40 dark:border-pink-500/30 text-slate-900 dark:text-white font-semibold text-xs sm:text-sm shadow-sm hover:shadow-md transition-all active:scale-95 group"
             >
-              <Mail className="w-4 h-4 text-pink-600 dark:text-pink-400 shrink-0" />
-              <span>{COMPANY.emails.general}</span>
+              <Mail className="w-4 h-4 text-pink-600 dark:text-pink-400 group-hover:scale-110 transition-transform shrink-0" />
+              <span className="font-semibold text-slate-900 dark:text-white group-hover:text-pink-600 dark:group-hover:text-pink-300 transition-colors">
+                {COMPANY.emails.general}
+              </span>
             </a>
             <Link
               to="/contact?type=quote"
