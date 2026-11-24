@@ -6,7 +6,7 @@ import {
   ShieldCheck, 
   Laptop, 
   Smartphone, 
-  Mail 
+  MessageCircle 
 } from 'lucide-react';
 import { PROJECT_BOOKING_CONFIG } from '../../data/projectBookingConfig';
 import { LaptopPreviewFrame, PhonePreviewFrame } from './DevicePreviewMockups';
@@ -91,16 +91,14 @@ export default function ProjectBookingPopup({
 
     const updateScale = () => {
       if (laptopContainerRef.current) {
-        // Laptop screen width inside the frame (minus bezel padding)
-        const laptopScreenWidth = laptopContainerRef.current.clientWidth - 16;
-        // Logical desktop width is 1200px
-        const calculatedLaptopScale = Math.min(0.35, Math.max(0.12, laptopScreenWidth / 1200));
+        // Laptop screen width inside frame
+        const laptopScreenWidth = Math.max(100, laptopContainerRef.current.clientWidth - 12);
+        const calculatedLaptopScale = Math.min(0.35, Math.max(0.10, laptopScreenWidth / 1200));
         
         // Phone screen width inside frame
-        const phoneContainerWidth = phoneContainerRef.current ? phoneContainerRef.current.clientWidth : 80;
-        const phoneScreenWidth = phoneContainerWidth - 8;
-        // Logical mobile width is 390px
-        const calculatedPhoneScale = Math.min(0.40, Math.max(0.16, phoneScreenWidth / 390));
+        const phoneContainerWidth = phoneContainerRef.current ? phoneContainerRef.current.clientWidth : 75;
+        const phoneScreenWidth = Math.max(50, phoneContainerWidth - 8);
+        const calculatedPhoneScale = Math.min(0.40, Math.max(0.14, phoneScreenWidth / 390));
 
         setDeviceScale({
           laptop: calculatedLaptopScale,
@@ -139,7 +137,7 @@ export default function ProjectBookingPopup({
       aria-modal="true"
       aria-labelledby="preview-popup-title"
       aria-describedby="preview-popup-desc"
-      className="fixed inset-0 z-[9999] flex items-center justify-center p-2.5 sm:p-5 md:p-6 overflow-hidden"
+      className="fixed inset-0 z-[9999] flex items-center justify-center p-2 sm:p-5 md:p-6 overflow-hidden"
       style={{ minHeight: '100dvh' }}
     >
       {/* Backdrop with subtle blur */}
@@ -151,7 +149,7 @@ export default function ProjectBookingPopup({
 
       {/* Main Modal Card:
           Desktop: max-w-4xl with balanced two-column grid.
-          Mobile: fits cleanly within 375x667 viewport with zero internal scrolling.
+          Mobile: fits cleanly within 403x704 viewport with zero internal scrolling.
       */}
       <div
         ref={dialogRef}
@@ -187,13 +185,16 @@ export default function ProjectBookingPopup({
           </button>
         </div>
 
-        {/* Modal Body: Two-Column Grid with Defined Column Constraints and No Overlap */}
-        <div className="px-3 sm:px-7 py-2.5 sm:py-6 flex-1 flex flex-col justify-between overflow-y-auto sm:overflow-y-auto">
+        {/* Modal Body: 
+            On Mobile: strict vertical flex order: Previews -> Headline -> Payment -> WhatsApp Actions.
+            On Desktop: balanced two-column grid (lg:grid lg:grid-cols-12).
+        */}
+        <div className="px-3 sm:px-7 py-2 sm:py-6 flex-1 flex flex-col justify-between overflow-y-auto sm:overflow-y-auto">
           
-          <div className="flex flex-col lg:grid lg:grid-cols-12 gap-3 sm:gap-6 lg:gap-8 items-center flex-1">
+          <div className="flex flex-col lg:grid lg:grid-cols-12 gap-2 sm:gap-6 lg:gap-8 items-center flex-1">
             
-            {/* ── Left Column: Device Mockups (Constrained to 6 columns with clean right margin and zero overlap) ── */}
-            <div className="w-full lg:col-span-6 flex flex-col items-center justify-center order-1 lg:order-1 min-w-0">
+            {/* ── DEVICE PREVIEWS (Positioned near the top immediately below header on mobile) ── */}
+            <div className="w-full lg:col-span-6 flex flex-col items-center justify-center order-1 lg:order-1 min-w-0 shrink-0">
               <div 
                 className="w-full flex items-end justify-center gap-2 sm:gap-3 pt-0.5 sm:pt-1 pb-1 sm:pb-2"
                 style={{
@@ -201,10 +202,10 @@ export default function ProjectBookingPopup({
                   '--phone-scale': deviceScale.phone,
                 }}
               >
-                {/* Laptop Preview: strictly constrained width */}
+                {/* Laptop Preview: landscape, proportional */}
                 <div 
                   ref={laptopContainerRef} 
-                  className="w-[64%] sm:w-[65%] lg:w-[70%] max-w-[220px] sm:max-w-[270px] lg:max-w-[310px] min-w-0"
+                  className="w-[62%] sm:w-[65%] lg:w-[70%] max-w-[195px] sm:max-w-[270px] lg:max-w-[310px] min-w-0"
                 >
                   <LaptopPreviewFrame
                     previewUrl={previewUrl}
@@ -213,10 +214,10 @@ export default function ProjectBookingPopup({
                   />
                 </div>
 
-                {/* Generic Notch-Free Phone Preview: side-by-side, no overlap */}
+                {/* Generic Notch-Free Phone Preview: portrait, side-by-side */}
                 <div 
                   ref={phoneContainerRef} 
-                  className="w-[28%] sm:w-[26%] lg:w-[25%] max-w-[90px] sm:max-w-[105px] lg:max-w-[115px] drop-shadow-xl shrink-0 min-w-0"
+                  className="w-[27%] sm:w-[26%] lg:w-[25%] max-w-[80px] sm:max-w-[105px] lg:max-w-[115px] drop-shadow-lg shrink-0 min-w-0"
                 >
                   <PhonePreviewFrame
                     previewUrl={previewUrl}
@@ -226,7 +227,7 @@ export default function ProjectBookingPopup({
                 </div>
               </div>
 
-              {/* Device Preview caption on desktop */}
+              {/* Desktop view captions */}
               <div className="hidden lg:flex items-center gap-4 mt-2 text-xs text-slate-500 dark:text-slate-400">
                 <span className="inline-flex items-center gap-1.5">
                   <Laptop className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
@@ -239,14 +240,14 @@ export default function ProjectBookingPopup({
               </div>
             </div>
 
-            {/* ── Right Column: Copy & Booking Action Section ── */}
-            <div className="w-full lg:col-span-6 flex flex-col justify-center order-2 lg:order-2 space-y-2 sm:space-y-4 min-w-0">
+            {/* ── CONTENT & ACTIONS SECTION (Positioned below device previews on mobile) ── */}
+            <div className="w-full lg:col-span-6 flex flex-col justify-center order-2 lg:order-2 space-y-1.5 sm:space-y-4 min-w-0">
               
-              {/* Headline & Concise Supporting copy */}
+              {/* Headline & Concise Supporting text */}
               <div>
                 <h2 
                   id="preview-popup-title"
-                  className="text-sm sm:text-xl lg:text-2xl font-display font-bold text-slate-900 dark:text-white leading-snug sm:leading-tight tracking-tight text-center lg:text-left"
+                  className="text-xs sm:text-xl lg:text-2xl font-display font-bold text-slate-900 dark:text-white leading-tight tracking-tight text-center lg:text-left"
                 >
                   {config.copy.headline}
                 </h2>
@@ -254,12 +255,12 @@ export default function ProjectBookingPopup({
                 {/* Mobile: exactly one short sentence */}
                 <p 
                   id="preview-popup-desc"
-                  className="mt-1 text-[11px] text-slate-600 dark:text-slate-300 leading-snug text-center lg:text-left sm:hidden"
+                  className="mt-0.5 text-[10px] sm:text-xs text-slate-600 dark:text-slate-300 leading-tight text-center lg:text-left sm:hidden"
                 >
                   You’ve reviewed the frontend preview. Proceed to discuss the 50% kickoff payment and next phase.
                 </p>
 
-                {/* Desktop: clear supporting text */}
+                {/* Desktop: detailed supporting text */}
                 <p 
                   className="mt-1.5 text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed hidden sm:block"
                 >
@@ -268,26 +269,26 @@ export default function ProjectBookingPopup({
               </div>
 
               {/* Compact Payment Panel */}
-              <div className="rounded-xl bg-gradient-to-br from-slate-50 to-purple-50/40 dark:from-slate-800/80 dark:to-purple-950/20 border border-purple-100 dark:border-purple-900/40 p-2 sm:p-3.5">
+              <div className="rounded-xl bg-gradient-to-br from-slate-50 to-purple-50/40 dark:from-slate-800/80 dark:to-purple-950/20 border border-purple-100 dark:border-purple-900/40 p-1.5 sm:p-3.5">
                 <div className="flex items-center pb-1 sm:pb-2 border-b border-purple-100/80 dark:border-purple-900/40">
-                  <div className="flex items-center gap-1.5">
-                    <Sparkles className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-purple-600 dark:text-purple-400" />
-                    <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-200">
+                  <div className="flex items-center gap-1">
+                    <Sparkles className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5 text-purple-600 dark:text-purple-400" />
+                    <span className="text-[9px] sm:text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-200">
                       {config.copy.bookingHeading}
                     </span>
                   </div>
                 </div>
 
-                <div className="mt-1 sm:mt-1.5">
-                  <div className="text-[9px] sm:text-xs text-slate-500 dark:text-slate-400 font-medium">
+                <div className="mt-0.5 sm:mt-1.5">
+                  <div className="text-[8px] sm:text-xs text-slate-500 dark:text-slate-400 font-medium">
                     Kickoff Booking Deposit
                   </div>
-                  <div className="text-sm sm:text-lg lg:text-xl font-bold font-display text-slate-900 dark:text-white mt-0.5">
+                  <div className="text-xs sm:text-lg lg:text-xl font-bold font-display text-slate-900 dark:text-white mt-0.5">
                     {config.copy.bookingAmount}
                   </div>
                   
                   {/* Mobile concise note */}
-                  <p className="mt-0.5 text-[10px] text-slate-500 dark:text-slate-400 leading-tight sm:hidden">
+                  <p className="mt-0.5 text-[9px] text-slate-500 dark:text-slate-400 leading-tight sm:hidden">
                     Applied toward the total project cost; balance follows the agreed proposal.
                   </p>
                   
@@ -298,15 +299,15 @@ export default function ProjectBookingPopup({
                 </div>
               </div>
 
-              {/* Action Links: Standard anchors with href for reliable mobile & desktop app handoff */}
-              <div className="space-y-1.5 sm:space-y-2 pt-0.5">
+              {/* Action Links: Both WhatsApp actions using anchor tags */}
+              <div className="space-y-1 sm:space-y-2 pt-0.5">
                 <a
                   href={primaryWhatsAppUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full inline-flex items-center justify-center gap-2 px-3 sm:px-5 py-2 sm:py-3 rounded-xl font-semibold text-xs sm:text-sm text-white bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 shadow-md shadow-emerald-600/25 active:scale-[0.99] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900 text-center"
+                  className="w-full inline-flex items-center justify-center gap-1.5 px-3 sm:px-5 py-1.5 sm:py-3 rounded-lg sm:rounded-xl font-semibold text-[11px] sm:text-sm text-white bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 shadow-sm sm:shadow-md shadow-emerald-600/25 active:scale-[0.99] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900 text-center"
                 >
-                  <WhatsAppIcon className="w-4 h-4 text-white fill-current shrink-0" />
+                  <WhatsAppIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white fill-current shrink-0" />
                   <span>{config.copy.primaryButtonText}</span>
                 </a>
 
@@ -314,9 +315,9 @@ export default function ProjectBookingPopup({
                   href={secondaryWhatsAppUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full inline-flex items-center justify-center gap-1 px-3 py-1 sm:py-2 rounded-lg sm:rounded-xl text-[11px] sm:text-xs font-medium text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-colors focus:outline-none focus:ring-1 focus:ring-slate-400 text-center"
+                  className="w-full inline-flex items-center justify-center gap-1 px-2.5 py-1 sm:py-2 rounded-lg sm:rounded-xl text-[10px] sm:text-xs font-medium text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-colors focus:outline-none focus:ring-1 focus:ring-slate-400 text-center"
                 >
-                  <Mail className="w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0" />
+                  <MessageCircle className="w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0" />
                   <span>{config.copy.secondaryButtonText}</span>
                 </a>
               </div>
