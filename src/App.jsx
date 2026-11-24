@@ -9,8 +9,6 @@ import ScrollToTop from './components/common/ScrollToTop';
 import Colorful3DBackground from './components/common/Colorful3DBackground';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
-import ProjectBookingPopup from './components/common/ProjectBookingPopup';
-import { usePageBottomTrigger } from './components/common/usePageBottomTrigger';
 
 // Existing Pages (Preserved 100%)
 import HomePage from './pages/HomePage';
@@ -48,8 +46,6 @@ import AdminSettingsPage from './admin/pages/AdminSettingsPage';
 
 // Public Layout Wrapper: preserves website design without leaking into Admin
 function PublicLayout() {
-  const { isOpen, close, footerRef } = usePageBottomTrigger();
-
   return (
     <div className="flex flex-col min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 font-sans selection:bg-pink-100 selection:text-pink-900 transition-colors duration-300 relative">
       <ScrollToTop />
@@ -58,10 +54,7 @@ function PublicLayout() {
       <main className="flex-grow relative z-10">
         <Outlet />
       </main>
-      <div ref={footerRef}>
-        <Footer />
-      </div>
-      <ProjectBookingPopup isOpen={isOpen} onClose={close} />
+      <Footer />
     </div>
   );
 }
