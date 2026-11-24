@@ -5,26 +5,28 @@ import { PROJECT_BOOKING_CONFIG } from '../../data/projectBookingConfig';
 /**
  * usePageBottomTrigger
  * 
- * Accurately detects when the visitor is scrolling DOWNWARD and the shared footer
+ * Accurately detects when the visitor is scrolling DOWNWARD and the page footer
  * first begins to enter the visible viewport.
  * 
- * Re-arming behavior:
- * - When closed, visitor can continue browsing normally.
- * - If visitor scrolls upward far enough that the footer leaves the trigger zone, the trigger re-arms.
- * - When visitor later scrolls downward and the footer enters the viewport again, the popup opens again.
- * - Works identically on EVERY route/page through the shared site layout without session lockout.
- * - Strictly isolated so device preview iframes cannot trigger popups.
+ * Key capabilities:
+ * - Mounts once through the shared layout and triggers on EVERY route.
+ * - Senses footer entry as soon as its top approaches or enters the viewport (`rect.top <= windowHeight + 10`).
+ * - Detects true downward scroll direction, avoiding accidental auto-triggers on initial page load.
+ * - Re-arms when user scrolls back UP away from the footer (`rect.top > windowHeight + 60`).
+ * - Resets on route changes so navigating to any route always has an active, armed trigger.
+ * - Strictly isolated from child iframes (`preview_mode=true`).
+ * - No session dismissal lock: closing allows continuous normal browsing and re-triggers upon re-entry.
  */
 export function usePageBottomTrigger({
   enabled = PROJECT_BOOKING_CONFIG.enabled,
-  delay = 250, // brief natural reaction delay once downward footer entry is confirmed
+  delay = 180, // responsive trigger delay
 } = {}) {
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
 
   // References for tracking scroll dynamics and state
   const lastScrollYRef = useRef(0);
-  const scrollDirectionRef = useRef('none'); // 'up' | 'down' | 'none'
+  const scrollDirectionRef = useRef('none');
   const isFooterInViewRef = useRef(false);
   const hasTriggeredForCurrentEntryRef = useRef(false);
   const triggerTimerRef = useRef(null);
@@ -39,7 +41,6 @@ export function usePageBottomTrigger({
     window.name === 'project-preview-frame'
   );
 
-  // Clear timers helper
   const clearPendingTimer = useCallback(() => {
     if (triggerTimerRef.current) {
       clearTimeout(triggerTimerRef.current);
@@ -68,7 +69,7 @@ export function usePageBottomTrigger({
       const currentScrollY = window.scrollY || window.pageYOffset || document.documentElement.scrollTop || 0;
       const delta = currentScrollY - lastScrollYRef.current;
 
-      if (Math.abs(delta) > 2) {
+      if (Math.abs(delta) > 1) {
         hasUserScrolledOnThisPageRef.current = true;
         scrollDirectionRef.current = delta > 0 ? 'down' : 'up';
       }
@@ -103,28 +104,23 @@ export function usePageBottomTrigger({
       return;
     }
 
-    // Find footer element: use ref if attached or query semantic footer
-    const footerElement = targetFooterRef.current || document.querySelector('footer');
-    if (!footerElement) {
-      return;
-    }
-
     // Direct check function combining bounding rect, scroll direction, and viewport geometry
     const evaluateFooterEntry = () => {
+      // Find footer element: ref if attached or query semantic footer
+      const footerElement = targetFooterRef.current || document.querySelector('footer');
       if (!footerElement) return;
 
       const rect = footerElement.getBoundingClientRect();
       const windowHeight = window.innerHeight || document.documentElement.clientHeight;
       const currentScrollY = window.scrollY || window.pageYOffset || 0;
 
-      // Footer is considered "entering/in view" when its top is within or above the bottom viewport edge
-      // We give a responsive lead buffer so as soon as the footer top starts entering the bottom of the screen:
-      const footerTopFromViewportBottom = windowHeight - rect.top;
-      const isEnteringViewport = footerTopFromViewportBottom >= 15; // first starts entering
+      // Check if footer top is within or starting to enter the visible screen
+      // rect.top is the distance from the top of the viewport to the top of the footer.
+      // When rect.top <= windowHeight, the top of the footer has entered the viewport.
+      const isEnteringViewport = rect.top <= (windowHeight + 20);
 
       // Check if footer has completely left the trigger area (scrolled upward far enough)
-      // e.g. footer top is well below the bottom of the viewport
-      const hasLeftTriggerArea = rect.top > windowHeight + 80;
+      const hasLeftTriggerArea = rect.top > (windowHeight + 70);
 
       if (hasLeftTriggerArea) {
         // Re-arm trigger when visitor scrolls upward out of the footer zone
@@ -137,14 +133,11 @@ export function usePageBottomTrigger({
       if (isEnteringViewport) {
         isFooterInViewRef.current = true;
 
-        // Trigger condition:
-        // 1. Not already open
-        // 2. Has not already triggered for this current entry
-        // 3. Visitor is scrolling downward (or on short pages after engagement, user moved down)
-        // 4. User has actually scrolled on this page (avoid immediate 0ms flash on initial page load if footer was visible)
-        const isScrollingDown = scrollDirectionRef.current === 'down' || (hasUserScrolledOnThisPageRef.current && currentScrollY > 10);
+        // Downward scroll condition:
+        // User is scrolling downward, or has engaged scrolling on this page and is near/in footer
+        const isScrollingDown = scrollDirectionRef.current === 'down' || (hasUserScrolledOnThisPageRef.current && currentScrollY > 15);
         const timeSincePageMount = Date.now() - initialMountTimeRef.current;
-        const pageEngagementReady = timeSincePageMount > 600 && hasUserScrolledOnThisPageRef.current;
+        const pageEngagementReady = timeSincePageMount > 400 && hasUserScrolledOnThisPageRef.current;
 
         if (!isOpen && !hasTriggeredForCurrentEntryRef.current && isScrollingDown && pageEngagementReady) {
           if (!triggerTimerRef.current) {
@@ -156,21 +149,20 @@ export function usePageBottomTrigger({
           }
         }
       } else {
-        // Footer is not in viewport yet
         clearPendingTimer();
       }
     };
 
-    // 1. Intersection Observer with responsive root margins
+    // 1. Intersection Observer with lead margin
     let observer = null;
-    if (typeof IntersectionObserver !== 'undefined') {
+    const footerElement = targetFooterRef.current || document.querySelector('footer');
+    if (footerElement && typeof IntersectionObserver !== 'undefined') {
       observer = new IntersectionObserver(
         (entries) => {
           entries.forEach((entry) => {
             if (entry.isIntersecting) {
               evaluateFooterEntry();
             } else {
-              // When footer exits the bottom of the viewport, re-arm
               const windowHeight = window.innerHeight || document.documentElement.clientHeight;
               if (entry.boundingClientRect.top > windowHeight) {
                 isFooterInViewRef.current = false;
@@ -181,15 +173,15 @@ export function usePageBottomTrigger({
           });
         },
         {
-          root: null, // viewport
-          rootMargin: '0px 0px 40px 0px', // detects when footer first starts entering visible screen
-          threshold: [0, 0.05, 0.15],
+          root: null,
+          rootMargin: '0px 0px 40px 0px', // detects when footer first starts entering
+          threshold: [0, 0.05, 0.1],
         }
       );
       observer.observe(footerElement);
     }
 
-    // 2. Scroll listener to evaluate direction on every frame
+    // 2. Window scroll & resize listeners for high-frequency evaluation
     let ticking = false;
     const onScrollCheck = () => {
       if (!ticking) {
@@ -220,7 +212,7 @@ export function usePageBottomTrigger({
     setIsOpen(false);
     clearPendingTimer();
     // Keep hasTriggeredForCurrentEntryRef = true while the user remains in the footer area
-    // Once they scroll upward out of the footer, it will automatically re-arm
+    // Once they scroll upward out of the footer, it automatically re-arms
     hasTriggeredForCurrentEntryRef.current = true;
   }, [clearPendingTimer]);
 

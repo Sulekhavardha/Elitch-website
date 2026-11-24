@@ -2,42 +2,44 @@ import React, { memo } from 'react';
 
 /**
  * Laptop frame rendering the actual website preview inside.
- * Uses an iframe of current origin or responsive clone with sandboxed pointer/scroll.
+ * Scaled dynamically via CSS variable or props.
+ * Strictly constrained with aspect ratio and internal dimensions so it never overflows.
  */
 export const LaptopPreviewFrame = memo(function LaptopPreviewFrame({
   previewUrl,
   brandName = 'Elicit Research',
+  compact = false,
 }) {
   return (
-    <div className="relative w-full max-w-[540px] mx-auto select-none group">
+    <div className="relative w-full select-none group">
       {/* Laptop Top Case / Display Screen */}
-      <div className="relative rounded-t-xl bg-slate-900 p-2 sm:p-2.5 shadow-2xl border border-slate-700/80 ring-1 ring-white/10">
+      <div className={`relative rounded-t-lg sm:rounded-t-xl bg-slate-900 shadow-xl border border-slate-700/80 ring-1 ring-white/10 ${compact ? 'p-1 sm:p-1.5' : 'p-1.5 sm:p-2'}`}>
         {/* Camera notch / dot */}
-        <div className="absolute top-1 left-1/2 -translate-x-1/2 flex items-center gap-1.5 z-20">
-          <div className="w-1.5 h-1.5 rounded-full bg-slate-950 border border-slate-700 flex items-center justify-center">
+        <div className="absolute top-0.5 sm:top-1 left-1/2 -translate-x-1/2 flex items-center gap-1 z-20">
+          <div className="w-1 sm:w-1.5 h-1 sm:h-1.5 rounded-full bg-slate-950 border border-slate-700 flex items-center justify-center">
             <div className="w-0.5 h-0.5 rounded-full bg-emerald-500/80" />
           </div>
         </div>
 
         {/* Browser URL Bar header inside laptop */}
-        <div className="flex items-center gap-2 px-3 py-1.5 bg-slate-800/90 rounded-t-md mb-1 border-b border-slate-700/60">
-          <div className="flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-rose-500/80 inline-block" />
-            <span className="w-2 h-2 rounded-full bg-amber-500/80 inline-block" />
-            <span className="w-2 h-2 rounded-full bg-emerald-500/80 inline-block" />
+        <div className={`flex items-center gap-1 sm:gap-1.5 bg-slate-800/90 rounded-t-xs sm:rounded-t-sm border-b border-slate-700/60 ${compact ? 'px-1.5 py-0.5 mb-0.5' : 'px-2 py-0.5 sm:py-1 mb-0.5 sm:mb-1'}`}>
+          <div className="flex items-center gap-1 shrink-0">
+            <span className="w-1.5 h-1.5 rounded-full bg-rose-500/80 inline-block" />
+            <span className="w-1.5 h-1.5 rounded-full bg-amber-500/80 inline-block" />
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500/80 inline-block" />
           </div>
-          <div className="flex-1 bg-slate-900/90 text-[10px] sm:text-[11px] font-mono text-slate-300 px-2.5 py-0.5 rounded border border-slate-700/50 flex items-center justify-between truncate">
+          <div className="flex-1 bg-slate-900/90 text-[8px] sm:text-[10px] font-mono text-slate-300 px-1.5 py-0.2 sm:py-0.5 rounded border border-slate-700/50 flex items-center justify-between truncate min-w-0">
             <span className="truncate">https://preview.{brandName.toLowerCase().replace(/[^a-z0-9]/g, '')}.com</span>
-            <span className="text-[9px] uppercase tracking-wider text-emerald-400 font-semibold ml-1.5 shrink-0">Live</span>
+            <span className="text-[7px] sm:text-[8px] uppercase tracking-wider text-emerald-400 font-semibold ml-1 shrink-0">Live</span>
           </div>
         </div>
 
         {/* Display Viewport with scaled responsive iframe */}
-        <div className="relative w-full bg-slate-950 rounded-b-md overflow-hidden aspect-[16/10] border border-slate-800">
+        <div className="relative w-full bg-slate-950 rounded-b-xs sm:rounded-b-sm overflow-hidden aspect-[16/10] border border-slate-800">
           <div
             className="w-[1280px] h-[800px] origin-top-left pointer-events-none select-none"
             style={{
-              transform: 'scale(var(--laptop-scale, 0.38))',
+              transform: 'scale(var(--laptop-scale, 0.28))',
               width: '1280px',
               height: '800px',
             }}
@@ -52,18 +54,18 @@ export const LaptopPreviewFrame = memo(function LaptopPreviewFrame({
               loading="eager"
             />
           </div>
-          {/* Subtle overlay to prevent click trapping while keeping full clarity */}
+          {/* Transparent overlay */}
           <div className="absolute inset-0 bg-transparent pointer-events-auto" />
         </div>
       </div>
 
       {/* Laptop Bottom Case & Hinge */}
-      <div className="relative -mt-0.5 h-3 sm:h-3.5 bg-gradient-to-b from-slate-700 via-slate-800 to-slate-900 rounded-b-xl shadow-lg border-t border-slate-600/50 flex items-center justify-center">
-        {/* Notch cutout for finger opening */}
-        <div className="w-16 h-1 rounded-b-sm bg-slate-950/80" />
+      <div className={`relative -mt-0.5 bg-gradient-to-b from-slate-700 via-slate-800 to-slate-900 rounded-b-md sm:rounded-b-lg shadow-md border-t border-slate-600/50 flex items-center justify-center ${compact ? 'h-1.5 sm:h-2' : 'h-2 sm:h-2.5'}`}>
+        {/* Notch cutout */}
+        <div className="w-8 sm:w-12 h-0.5 rounded-b-xs bg-slate-950/80" />
       </div>
-      {/* Laptop base rubber feet shadow */}
-      <div className="mx-auto w-[92%] h-2 bg-black/40 blur-md rounded-full mt-0.5" />
+      {/* Laptop shadow */}
+      <div className="mx-auto w-[90%] h-1 sm:h-1.5 bg-black/40 blur-xs rounded-full mt-0.5" />
     </div>
   );
 });
@@ -72,23 +74,23 @@ export const LaptopPreviewFrame = memo(function LaptopPreviewFrame({
  * Clean Generic Smartphone frame rendering the website's mobile preview.
  * - No notch, no Dynamic Island, no camera cutout, and no decorative shape at the top.
  * - Screen is completely clear from edge to edge so header and first content are fully visible.
- * - Subtle, clean bezel with balanced proportions.
  */
 export const PhonePreviewFrame = memo(function PhonePreviewFrame({
   previewUrl,
   brandName = 'Elicit',
+  compact = false,
 }) {
   return (
-    <div className="relative w-[140px] sm:w-[155px] md:w-[170px] select-none shrink-0 group">
+    <div className="relative w-full select-none group">
       {/* Clean phone chassis with subtle uniform bezel */}
-      <div className="relative rounded-[22px] sm:rounded-[24px] bg-slate-900 p-1.5 sm:p-2 shadow-2xl border-2 border-slate-700/80 ring-1 ring-white/10">
+      <div className={`relative bg-slate-900 shadow-xl border border-slate-700/80 ring-1 ring-white/10 ${compact ? 'rounded-[12px] sm:rounded-[18px] p-1' : 'rounded-[16px] sm:rounded-[20px] p-1 sm:p-1.5'}`}>
         
         {/* Clean edge-to-edge screen display - no notch, no cutout, no island */}
-        <div className="relative w-full rounded-[16px] sm:rounded-[18px] overflow-hidden aspect-[9/19] bg-slate-950 border border-slate-800">
+        <div className={`relative w-full overflow-hidden aspect-[9/19] bg-slate-950 border border-slate-800 ${compact ? 'rounded-[8px] sm:rounded-[14px]' : 'rounded-[12px] sm:rounded-[16px]'}`}>
           <div
             className="w-[375px] h-[800px] origin-top-left pointer-events-none select-none"
             style={{
-              transform: 'scale(var(--phone-scale, 0.38))',
+              transform: 'scale(var(--phone-scale, 0.28))',
               width: '375px',
               height: '800px',
             }}
@@ -108,7 +110,7 @@ export const PhonePreviewFrame = memo(function PhonePreviewFrame({
         </div>
       </div>
       {/* Phone subtle drop shadow */}
-      <div className="mx-auto w-[85%] h-2.5 bg-black/45 blur-md rounded-full mt-1" />
+      <div className="mx-auto w-[85%] h-1 sm:h-1.5 bg-black/45 blur-xs rounded-full mt-0.5" />
     </div>
   );
 });

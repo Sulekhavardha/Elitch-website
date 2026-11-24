@@ -5,10 +5,8 @@ import {
   Sparkles, 
   ShieldCheck, 
   Laptop, 
-  Smartphone,
-  Mail,
-  Send,
-  MessageCircle
+  Smartphone, 
+  Mail 
 } from 'lucide-react';
 import { PROJECT_BOOKING_CONFIG } from '../../data/projectBookingConfig';
 import { LaptopPreviewFrame, PhonePreviewFrame } from './DevicePreviewMockups';
@@ -38,10 +36,9 @@ export default function ProjectBookingPopup({
   const closeButtonRef = useRef(null);
   const laptopContainerRef = useRef(null);
   const phoneContainerRef = useRef(null);
-  const [deviceScale, setDeviceScale] = useState({ laptop: 0.35, phone: 0.35 });
+  const [deviceScale, setDeviceScale] = useState({ laptop: 0.28, phone: 0.28 });
 
   // Compute preview URL safely ensuring preview_mode query param is added
-  // so child iframes know they are in preview and never open popups
   const previewUrl = useMemo(() => {
     if (typeof window === 'undefined') return '/?preview_mode=true';
     const currentPath = location.pathname;
@@ -96,12 +93,12 @@ export default function ProjectBookingPopup({
     const updateScale = () => {
       if (laptopContainerRef.current) {
         const laptopWidth = laptopContainerRef.current.clientWidth;
-        // The laptop screen viewport is 1280px wide
-        const calculatedLaptopScale = Math.min(0.42, Math.max(0.22, laptopWidth / 1280));
+        // Laptop screen viewport is 1280px wide
+        const calculatedLaptopScale = Math.min(0.32, Math.max(0.12, laptopWidth / 1280));
         
-        // The phone viewport is 375px wide, phone container is around 140px-170px
-        const phoneWidth = phoneContainerRef.current ? phoneContainerRef.current.clientWidth - 16 : 140;
-        const calculatedPhoneScale = Math.min(0.45, Math.max(0.25, phoneWidth / 375));
+        // Phone container width: viewport is 375px wide
+        const phoneWidth = phoneContainerRef.current ? phoneContainerRef.current.clientWidth : 75;
+        const calculatedPhoneScale = Math.min(0.38, Math.max(0.15, phoneWidth / 375));
 
         setDeviceScale({
           laptop: calculatedLaptopScale,
@@ -147,7 +144,8 @@ export default function ProjectBookingPopup({
       aria-modal="true"
       aria-labelledby="preview-popup-title"
       aria-describedby="preview-popup-desc"
-      className="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-5 md:p-6 overflow-y-auto"
+      className="fixed inset-0 z-[9999] flex items-center justify-center p-2.5 sm:p-5 md:p-6 overflow-hidden"
+      style={{ minHeight: '100dvh' }}
     >
       {/* Backdrop with subtle blur */}
       <div
@@ -156,27 +154,30 @@ export default function ProjectBookingPopup({
         aria-hidden="true"
       />
 
-      {/* Main Modal Card */}
+      {/* Main Modal Card:
+          Desktop: constrained to max-w-4xl with balanced two-column grid.
+          Mobile: fits cleanly within 375x667 viewport with zero internal scrolling.
+      */}
       <div
         ref={dialogRef}
-        onClick={(e) => e.stopPropagation()} // Prevent inside clicks from closing backdrop
-        className="relative w-full max-w-5xl max-h-[92vh] sm:max-h-[90vh] flex flex-col bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl sm:rounded-3xl shadow-2xl shadow-purple-950/20 dark:shadow-black/70 overflow-hidden z-10 transition-all duration-300 animate-scaleUp"
+        onClick={(e) => e.stopPropagation()}
+        className="relative w-full max-w-sm sm:max-w-lg lg:max-w-4xl max-h-[calc(100dvh-1rem)] sm:max-h-[90vh] flex flex-col bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl sm:rounded-3xl shadow-2xl shadow-purple-950/20 dark:shadow-black/70 overflow-hidden z-10 transition-all duration-300 animate-scaleUp"
       >
-        {/* Subtle decorative brand accent line */}
-        <div className="h-1.5 w-full bg-gradient-to-r from-pink-500 via-purple-600 to-indigo-500 shrink-0" />
+        {/* Decorative brand accent line */}
+        <div className="h-1 sm:h-1.5 w-full bg-gradient-to-r from-pink-500 via-purple-600 to-indigo-500 shrink-0" />
 
         {/* Modal Header Bar with Close Button */}
-        <div className="flex items-center justify-between px-5 sm:px-7 py-3.5 border-b border-slate-100 dark:border-slate-800/80 bg-slate-50/60 dark:bg-slate-900/60 shrink-0">
-          <div className="flex items-center gap-2.5">
-            <span className="flex h-2 w-2 relative">
+        <div className="flex items-center justify-between px-3.5 sm:px-7 py-2 sm:py-3.5 border-b border-slate-100 dark:border-slate-800/80 bg-slate-50/70 dark:bg-slate-900/60 shrink-0">
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            <span className="flex h-2 w-2 relative shrink-0">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
               <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
             </span>
-            <span className="text-xs font-semibold tracking-wider uppercase text-purple-700 dark:text-purple-400">
+            <span className="text-[10px] sm:text-xs font-semibold tracking-wider uppercase text-purple-700 dark:text-purple-400">
               {config.copy.eyebrow}
             </span>
-            <span className="text-slate-300 dark:text-slate-700">|</span>
-            <span className="text-xs font-medium text-slate-500 dark:text-slate-400 hidden sm:inline">
+            <span className="text-slate-300 dark:text-slate-700 hidden sm:inline">|</span>
+            <span className="text-xs font-medium text-slate-500 dark:text-slate-400 hidden sm:inline truncate max-w-[200px]">
               {config.client.brandName}
             </span>
           </div>
@@ -185,47 +186,53 @@ export default function ProjectBookingPopup({
             ref={closeButtonRef}
             onClick={onClose}
             aria-label="Close website preview popup"
-            className="p-1.5 rounded-full text-slate-400 hover:text-slate-700 dark:text-slate-400 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-slate-800 transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500"
+            className="p-1 sm:p-1.5 rounded-full text-slate-400 hover:text-slate-700 dark:text-slate-400 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-slate-800 transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500"
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
         </div>
 
-        {/* Scrollable Content Body */}
-        <div className="overflow-y-auto px-5 sm:px-8 py-6 sm:py-7 flex-1">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        {/* Modal Body: Two-Column Grid with Defined Column Constraints and No Overlap */}
+        <div className="px-3 sm:px-7 py-2.5 sm:py-6 flex-1 flex flex-col justify-between overflow-y-auto sm:overflow-y-auto">
+          
+          <div className="flex flex-col lg:grid lg:grid-cols-12 gap-3 sm:gap-6 lg:gap-8 items-center flex-1">
             
-            {/* Left Side: Device Frames Displaying the Current Website */}
-            <div className="lg:col-span-7 flex flex-col items-center justify-center order-2 lg:order-1">
+            {/* ── Left Column: Device Mockups (Constrained to 6 columns with clean right margin and zero overlap) ── */}
+            <div className="w-full lg:col-span-6 flex flex-col items-center justify-center order-1 lg:order-1 min-w-0">
               <div 
-                className="relative w-full flex items-end justify-center pt-2 pb-4"
+                className="w-full flex items-end justify-center gap-2 sm:gap-3 pt-0.5 sm:pt-1 pb-1 sm:pb-2"
                 style={{
                   '--laptop-scale': deviceScale.laptop,
                   '--phone-scale': deviceScale.phone,
                 }}
               >
-                {/* Laptop Preview Container */}
-                <div ref={laptopContainerRef} className="w-full max-w-[460px] sm:max-w-[490px]">
+                {/* Laptop Preview: strictly constrained width */}
+                <div 
+                  ref={laptopContainerRef} 
+                  className="w-[64%] sm:w-[65%] lg:w-[70%] max-w-[220px] sm:max-w-[270px] lg:max-w-[310px] min-w-0"
+                >
                   <LaptopPreviewFrame
                     previewUrl={previewUrl}
                     brandName={config.client.brandName}
+                    compact={true}
                   />
                 </div>
 
-                {/* Overlapping Phone Preview Container - Generic Phone with edge-to-edge clear screen */}
+                {/* Generic Notch-Free Phone Preview: side-by-side, no overlap */}
                 <div 
                   ref={phoneContainerRef} 
-                  className="absolute -right-1 sm:right-2 bottom-0 z-20 drop-shadow-2xl"
+                  className="w-[28%] sm:w-[26%] lg:w-[25%] max-w-[90px] sm:max-w-[105px] lg:max-w-[115px] drop-shadow-xl shrink-0 min-w-0"
                 >
                   <PhonePreviewFrame
                     previewUrl={previewUrl}
                     brandName={config.client.brandName}
+                    compact={true}
                   />
                 </div>
               </div>
 
-              {/* Device Preview caption */}
-              <div className="flex items-center gap-4 mt-3 text-xs text-slate-500 dark:text-slate-400">
+              {/* Device Preview caption on desktop */}
+              <div className="hidden lg:flex items-center gap-4 mt-2 text-xs text-slate-500 dark:text-slate-400">
                 <span className="inline-flex items-center gap-1.5">
                   <Laptop className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
                   Desktop View
@@ -237,69 +244,88 @@ export default function ProjectBookingPopup({
               </div>
             </div>
 
-            {/* Right Side: Copy & Booking Reserve Panel */}
-            <div className="lg:col-span-5 flex flex-col justify-center order-1 lg:order-2 space-y-5">
+            {/* ── Right Column: Copy & Booking Action Section (6 columns on desktop, generous spacing, no overlap) ── */}
+            <div className="w-full lg:col-span-6 flex flex-col justify-center order-2 lg:order-2 space-y-2 sm:space-y-4 min-w-0">
               
+              {/* Headline & Concise Supporting copy */}
               <div>
                 <h2 
                   id="preview-popup-title"
-                  className="text-2xl sm:text-3xl font-display font-bold text-slate-900 dark:text-white leading-tight tracking-tight"
+                  className="text-sm sm:text-xl lg:text-2xl font-display font-bold text-slate-900 dark:text-white leading-snug sm:leading-tight tracking-tight text-center lg:text-left"
                 >
                   {config.copy.headline}
                 </h2>
+                
+                {/* Mobile: exactly one short sentence */}
                 <p 
                   id="preview-popup-desc"
-                  className="mt-2.5 text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed"
+                  className="mt-1 text-[11px] text-slate-600 dark:text-slate-300 leading-snug text-center lg:text-left sm:hidden"
+                >
+                  You’ve reviewed the frontend preview. Proceed to discuss the 50% kickoff payment and next phase.
+                </p>
+
+                {/* Desktop: clear supporting text */}
+                <p 
+                  className="mt-1.5 text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed hidden sm:block"
                 >
                   {config.copy.supportingText}
                 </p>
               </div>
 
-              {/* Booking Reserve Box - Milestone 1 label removed cleanly */}
-              <div className="rounded-2xl bg-gradient-to-br from-slate-50 to-purple-50/40 dark:from-slate-800/80 dark:to-purple-950/20 border border-purple-100 dark:border-purple-900/40 p-4 sm:p-5">
-                <div className="flex items-center pb-3 border-b border-purple-100/80 dark:border-purple-900/40">
-                  <div className="flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 text-purple-600 dark:text-purple-400" />
-                    <span className="text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-200">
+              {/* Compact Payment Panel */}
+              <div className="rounded-xl bg-gradient-to-br from-slate-50 to-purple-50/40 dark:from-slate-800/80 dark:to-purple-950/20 border border-purple-100 dark:border-purple-900/40 p-2 sm:p-3.5">
+                <div className="flex items-center pb-1 sm:pb-2 border-b border-purple-100/80 dark:border-purple-900/40">
+                  <div className="flex items-center gap-1.5">
+                    <Sparkles className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-purple-600 dark:text-purple-400" />
+                    <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-200">
                       {config.copy.bookingHeading}
                     </span>
                   </div>
                 </div>
 
-                <div className="mt-3">
-                  <div className="text-xs text-slate-500 dark:text-slate-400 font-medium">Kickoff Booking Deposit</div>
-                  <div className="text-xl sm:text-2xl font-bold font-display text-slate-900 dark:text-white mt-0.5">
+                <div className="mt-1 sm:mt-1.5">
+                  <div className="text-[9px] sm:text-xs text-slate-500 dark:text-slate-400 font-medium">
+                    Kickoff Booking Deposit
+                  </div>
+                  <div className="text-sm sm:text-lg lg:text-xl font-bold font-display text-slate-900 dark:text-white mt-0.5">
                     {config.copy.bookingAmount}
                   </div>
-                  <p className="mt-2 text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                  
+                  {/* Mobile concise note */}
+                  <p className="mt-0.5 text-[10px] text-slate-500 dark:text-slate-400 leading-tight sm:hidden">
+                    Applied toward the total project cost; balance follows the agreed proposal.
+                  </p>
+                  
+                  {/* Desktop detailed note */}
+                  <p className="mt-1 text-xs text-slate-500 dark:text-slate-400 leading-relaxed hidden sm:block">
                     {config.copy.bookingNote}
                   </p>
                 </div>
               </div>
 
               {/* Action Buttons: WhatsApp Primary, Email Secondary */}
-              <div className="space-y-2.5 pt-1">
+              <div className="space-y-1.5 sm:space-y-2 pt-0.5">
                 <button
                   type="button"
                   onClick={handlePrimaryWhatsApp}
-                  className="w-full inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-xl font-semibold text-white bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 shadow-lg shadow-emerald-600/25 active:scale-[0.99] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900"
+                  className="w-full inline-flex items-center justify-center gap-2 px-3 sm:px-5 py-2 sm:py-3 rounded-xl font-semibold text-xs sm:text-sm text-white bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 shadow-md shadow-emerald-600/25 active:scale-[0.99] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900"
                 >
-                  <WhatsAppIcon className="w-5 h-5 text-white fill-current" />
+                  <WhatsAppIcon className="w-4 h-4 text-white fill-current shrink-0" />
                   <span>{config.copy.primaryButtonText}</span>
                 </button>
 
                 <button
                   type="button"
                   onClick={handleSecondaryEmail}
-                  className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-medium text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-colors focus:outline-none focus:ring-1 focus:ring-slate-400"
+                  className="w-full inline-flex items-center justify-center gap-1 px-3 py-1 sm:py-2 rounded-lg sm:rounded-xl text-[11px] sm:text-xs font-medium text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-colors focus:outline-none focus:ring-1 focus:ring-slate-400"
                 >
-                  <Mail className="w-3.5 h-3.5" />
+                  <Mail className="w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0" />
                   <span>{config.copy.secondaryButtonText}</span>
                 </button>
               </div>
 
-              {/* Transparency note */}
-              <div className="flex items-center justify-center gap-2 text-[11px] text-slate-500 dark:text-slate-400 pt-1">
+              {/* Desktop reassurance note */}
+              <div className="hidden sm:flex items-center justify-center gap-1.5 text-[11px] text-slate-500 dark:text-slate-400 pt-0.5">
                 <ShieldCheck className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
                 <span>Kickoff agreement followed by direct developer milestone delivery.</span>
               </div>
