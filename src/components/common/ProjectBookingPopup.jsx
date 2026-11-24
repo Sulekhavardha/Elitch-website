@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, useMemo } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { 
   X, 
   Sparkles, 
@@ -30,13 +30,12 @@ export default function ProjectBookingPopup({
   onClose,
   config = PROJECT_BOOKING_CONFIG,
 }) {
-  const navigate = useNavigate();
   const location = useLocation();
   const dialogRef = useRef(null);
   const closeButtonRef = useRef(null);
   const laptopContainerRef = useRef(null);
   const phoneContainerRef = useRef(null);
-  const [deviceScale, setDeviceScale] = useState({ laptop: 0.28, phone: 0.28 });
+  const [deviceScale, setDeviceScale] = useState({ laptop: 0.25, phone: 0.25 });
 
   // Compute preview URL safely ensuring preview_mode query param is added
   const previewUrl = useMemo(() => {
@@ -86,19 +85,22 @@ export default function ProjectBookingPopup({
     }
   }, [isOpen]);
 
-  // Measure and adjust iframe scaling responsively based on container widths
+  // Measure and adjust iframe scaling responsively based on container screen widths
   useEffect(() => {
     if (!isOpen) return;
 
     const updateScale = () => {
       if (laptopContainerRef.current) {
-        const laptopWidth = laptopContainerRef.current.clientWidth;
-        // Laptop screen viewport is 1280px wide
-        const calculatedLaptopScale = Math.min(0.32, Math.max(0.12, laptopWidth / 1280));
+        // Laptop screen width inside the frame (minus bezel padding)
+        const laptopScreenWidth = laptopContainerRef.current.clientWidth - 16;
+        // Logical desktop width is 1200px
+        const calculatedLaptopScale = Math.min(0.35, Math.max(0.12, laptopScreenWidth / 1200));
         
-        // Phone container width: viewport is 375px wide
-        const phoneWidth = phoneContainerRef.current ? phoneContainerRef.current.clientWidth : 75;
-        const calculatedPhoneScale = Math.min(0.38, Math.max(0.15, phoneWidth / 375));
+        // Phone screen width inside frame
+        const phoneContainerWidth = phoneContainerRef.current ? phoneContainerRef.current.clientWidth : 80;
+        const phoneScreenWidth = phoneContainerWidth - 8;
+        // Logical mobile width is 390px
+        const calculatedPhoneScale = Math.min(0.40, Math.max(0.16, phoneScreenWidth / 390));
 
         setDeviceScale({
           laptop: calculatedLaptopScale,
@@ -112,31 +114,24 @@ export default function ProjectBookingPopup({
     return () => window.removeEventListener('resize', updateScale);
   }, [isOpen]);
 
-  if (!isOpen) return null;
+  // Construct WhatsApp URLs using the shared configured number (international format)
+  const whatsappNumber = config.contact?.whatsappNumber || config.actions?.primary?.number || '9670111167';
 
-  // Primary Action: Open WhatsApp chat in new window/tab with prefilled message
-  const handlePrimaryWhatsApp = () => {
-    const primary = config.actions.primary;
-    const whatsappNum = primary?.number || config.contact?.whatsappNumber || '9670111167';
-    const rawMessage = typeof primary?.getMessage === 'function' 
-      ? primary.getMessage(config.client?.brandName) 
+  const primaryWhatsAppUrl = useMemo(() => {
+    const rawMessage = typeof config.actions?.primary?.getMessage === 'function' 
+      ? config.actions.primary.getMessage(config.client?.brandName) 
       : `Hi, I’ve reviewed the ${config.client?.brandName || 'website'} preview and would like to discuss proceeding with the project. Please share the next steps for the 50% kickoff payment based on our agreed project fee and the remaining development work. Thank you.`;
-    
-    const waUrl = `https://wa.me/${whatsappNum}?text=${encodeURIComponent(rawMessage)}`;
-    window.open(waUrl, '_blank', 'noopener,noreferrer');
-  };
+    return `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(rawMessage)}`;
+  }, [config, whatsappNumber]);
 
-  // Secondary Action: Open WhatsApp chat with prefilled changes draft message
-  const handleSecondaryWhatsApp = () => {
-    const secondary = config.actions.secondary;
-    const whatsappNum = secondary?.number || config.contact?.whatsappNumber || '9670111167';
-    const rawMessage = typeof secondary?.getMessage === 'function'
-      ? secondary.getMessage(config.client?.brandName)
+  const secondaryWhatsAppUrl = useMemo(() => {
+    const rawMessage = typeof config.actions?.secondary?.getMessage === 'function'
+      ? config.actions.secondary.getMessage(config.client?.brandName)
       : `Hi, I’ve reviewed the ${config.client?.brandName || 'website'} preview. I’d like to request a few changes before proceeding. The changes I’d like are: `;
+    return `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(rawMessage)}`;
+  }, [config, whatsappNumber]);
 
-    const waUrl = `https://wa.me/${whatsappNum}?text=${encodeURIComponent(rawMessage)}`;
-    window.open(waUrl, '_blank', 'noopener,noreferrer');
-  };
+  if (!isOpen) return null;
 
   return (
     <div
@@ -155,7 +150,7 @@ export default function ProjectBookingPopup({
       />
 
       {/* Main Modal Card:
-          Desktop: constrained to max-w-4xl with balanced two-column grid.
+          Desktop: max-w-4xl with balanced two-column grid.
           Mobile: fits cleanly within 375x667 viewport with zero internal scrolling.
       */}
       <div
@@ -244,7 +239,7 @@ export default function ProjectBookingPopup({
               </div>
             </div>
 
-            {/* ── Right Column: Copy & Booking Action Section (6 columns on desktop, generous spacing, no overlap) ── */}
+            {/* ── Right Column: Copy & Booking Action Section ── */}
             <div className="w-full lg:col-span-6 flex flex-col justify-center order-2 lg:order-2 space-y-2 sm:space-y-4 min-w-0">
               
               {/* Headline & Concise Supporting copy */}
@@ -303,25 +298,27 @@ export default function ProjectBookingPopup({
                 </div>
               </div>
 
-              {/* Action Buttons: WhatsApp Primary, Email Secondary */}
+              {/* Action Links: Standard anchors with href for reliable mobile & desktop app handoff */}
               <div className="space-y-1.5 sm:space-y-2 pt-0.5">
-                <button
-                  type="button"
-                  onClick={handlePrimaryWhatsApp}
-                  className="w-full inline-flex items-center justify-center gap-2 px-3 sm:px-5 py-2 sm:py-3 rounded-xl font-semibold text-xs sm:text-sm text-white bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 shadow-md shadow-emerald-600/25 active:scale-[0.99] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900"
+                <a
+                  href={primaryWhatsAppUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full inline-flex items-center justify-center gap-2 px-3 sm:px-5 py-2 sm:py-3 rounded-xl font-semibold text-xs sm:text-sm text-white bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 shadow-md shadow-emerald-600/25 active:scale-[0.99] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900 text-center"
                 >
                   <WhatsAppIcon className="w-4 h-4 text-white fill-current shrink-0" />
                   <span>{config.copy.primaryButtonText}</span>
-                </button>
+                </a>
 
-                <button
-                  type="button"
-                  onClick={handleSecondaryWhatsApp}
-                  className="w-full inline-flex items-center justify-center gap-1 px-3 py-1 sm:py-2 rounded-lg sm:rounded-xl text-[11px] sm:text-xs font-medium text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-colors focus:outline-none focus:ring-1 focus:ring-slate-400"
+                <a
+                  href={secondaryWhatsAppUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full inline-flex items-center justify-center gap-1 px-3 py-1 sm:py-2 rounded-lg sm:rounded-xl text-[11px] sm:text-xs font-medium text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-colors focus:outline-none focus:ring-1 focus:ring-slate-400 text-center"
                 >
                   <Mail className="w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0" />
                   <span>{config.copy.secondaryButtonText}</span>
-                </button>
+                </a>
               </div>
 
               {/* Desktop reassurance note */}
