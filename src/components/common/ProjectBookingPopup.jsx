@@ -126,16 +126,16 @@ export default function ProjectBookingPopup({
     window.open(waUrl, '_blank', 'noopener,noreferrer');
   };
 
-  // Secondary Action: Open email draft to project's configured contact
-  const handleSecondaryEmail = () => {
+  // Secondary Action: Open WhatsApp chat with prefilled changes draft message
+  const handleSecondaryWhatsApp = () => {
     const secondary = config.actions.secondary;
-    if (secondary?.type === 'mailto') {
-      const mailtoUrl = `mailto:${secondary.email}?subject=${encodeURIComponent(secondary.subject)}&body=${encodeURIComponent(secondary.body)}`;
-      window.location.href = mailtoUrl;
-    } else {
-      navigate(secondary?.routeFallback || '/contact');
-      onClose();
-    }
+    const whatsappNum = secondary?.number || config.contact?.whatsappNumber || '9670111167';
+    const rawMessage = typeof secondary?.getMessage === 'function'
+      ? secondary.getMessage(config.client?.brandName)
+      : `Hi, I’ve reviewed the ${config.client?.brandName || 'website'} preview. I’d like to request a few changes before proceeding. The changes I’d like are: `;
+
+    const waUrl = `https://wa.me/${whatsappNum}?text=${encodeURIComponent(rawMessage)}`;
+    window.open(waUrl, '_blank', 'noopener,noreferrer');
   };
 
   return (
@@ -316,7 +316,7 @@ export default function ProjectBookingPopup({
 
                 <button
                   type="button"
-                  onClick={handleSecondaryEmail}
+                  onClick={handleSecondaryWhatsApp}
                   className="w-full inline-flex items-center justify-center gap-1 px-3 py-1 sm:py-2 rounded-lg sm:rounded-xl text-[11px] sm:text-xs font-medium text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-colors focus:outline-none focus:ring-1 focus:ring-slate-400"
                 >
                   <Mail className="w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0" />

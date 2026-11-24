@@ -55,13 +55,13 @@ export const PROJECT_BOOKING_CONFIG = {
       getMessage: (brandName = COMPANY.name) =>
         `Hi, I’ve reviewed the ${brandName} website preview and would like to discuss proceeding with the project. Please share the next steps for the 50% kickoff payment based on our agreed project fee and the remaining development work. Thank you.`,
     },
-    // Secondary action: discuss changes via email
+    // Secondary action: discuss changes via WhatsApp with dedicated prefilled draft message
     secondary: {
-      type: 'mailto',
-      email: COMPANY.emails.general || COMPANY.emails.rfq,
-      subject: `Feedback & Changes Discussion - ${COMPANY.shortName} Website Preview`,
-      body: `Hello Team,\n\nI have reviewed the frontend preview and would like to discuss a few adjustments before proceeding with the next phase.\n\nSpecific feedback / notes:\n1. \n2. \n\nPlease let me know when we can connect.\n\nThank you!`,
-      routeFallback: '/contact',
+      type: 'whatsapp',
+      number: '9670111167',
+      // Generates polite URL-encoded message inviting client to describe changes
+      getMessage: (brandName = COMPANY.name) =>
+        `Hi, I’ve reviewed the ${brandName} website preview. I’d like to request a few changes before proceeding. The changes I’d like are: `,
     },
   },
 };
