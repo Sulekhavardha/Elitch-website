@@ -40,8 +40,8 @@ export const PROJECT_BOOKING_CONFIG = {
 
   // Contact / WhatsApp channels
   contact: {
-    // International format without +, spaces, or punctuation
-    whatsappNumber: '9670111167',
+    // International format with country code (91 for India), digits only
+    whatsappNumber: '919670111167',
     email: COMPANY.emails.general || COMPANY.emails.rfq,
   },
 
@@ -50,7 +50,7 @@ export const PROJECT_BOOKING_CONFIG = {
     // Primary action: opens WhatsApp chat in new tab with prefilled message
     primary: {
       type: 'whatsapp',
-      number: '9670111167',
+      number: '919670111167',
       // Generates polite URL-encoded message dynamically using the project's brand name
       getMessage: (brandName = COMPANY.name) =>
         `Hi, I’ve reviewed the ${brandName} website preview and would like to discuss proceeding with the project. Please share the next steps for the 50% kickoff payment based on our agreed project fee and the remaining development work. Thank you.`,
@@ -58,7 +58,7 @@ export const PROJECT_BOOKING_CONFIG = {
     // Secondary action: discuss changes via WhatsApp with dedicated prefilled draft message
     secondary: {
       type: 'whatsapp',
-      number: '9670111167',
+      number: '919670111167',
       // Generates polite URL-encoded message inviting client to describe changes
       getMessage: (brandName = COMPANY.name) =>
         `Hi, I’ve reviewed the ${brandName} website preview. I’d like to request a few changes before proceeding. The changes I’d like are: `,

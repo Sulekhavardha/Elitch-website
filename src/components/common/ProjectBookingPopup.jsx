@@ -113,7 +113,7 @@ export default function ProjectBookingPopup({
   }, [isOpen]);
 
   // Construct WhatsApp URLs using the shared configured number (international format)
-  const whatsappNumber = config.contact?.whatsappNumber || config.actions?.primary?.number || '9670111167';
+  const whatsappNumber = config.contact?.whatsappNumber || config.actions?.primary?.number || '919670111167';
 
   const primaryWhatsAppUrl = useMemo(() => {
     const rawMessage = typeof config.actions?.primary?.getMessage === 'function' 
